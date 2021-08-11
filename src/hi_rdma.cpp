@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-11 16:29:57
+ * @LastEditTime: 2021-08-11 16:38:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -44,11 +44,13 @@ bool HiRDMA::find_then_open_device()
 {
     int _res;
     int _num_dev = 0;
-    struct ibv_device* _dev = NULL;
-    struct ibv_device** _dev_list = NULL;
+    struct ibv_device* _dev = nullptr;
+    struct ibv_context* _dev_ctx = nullptr;
+    struct ibv_device** _dev_list = nullptr;
 
     _dev_list = ibv_get_device_list(&_num_dev);
     if (_num_dev == 0) {
+        return false;
     }
 
     for (int i = 0; i < _num_dev; i++) {
