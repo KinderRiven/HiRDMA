@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-11 16:38:00
+ * @LastEditTime: 2021-08-11 16:40:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -55,10 +55,7 @@ bool HiRDMA::find_then_open_device()
 
     for (int i = 0; i < _num_dev; i++) {
         _dev = _dev_list[i];
-        _dev_ctx = ibv_open_device(_dev);
-        if (_dev_ctx != NULL) {
-            printf("[%s][%s]\n", _dev_ctx->name, _dev_ctx->dev_name);
-        }
+        printf("[%s][%s]\n", _dev->name, _dev->dev_name);
     }
     return true;
 }
