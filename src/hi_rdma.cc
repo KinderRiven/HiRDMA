@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-12 20:30:33
+ * @LastEditTime: 2021-08-12 20:32:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -69,6 +69,15 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
 
     *context = new HiRDMA(_dev, _dev_ctx, _dev_pd, _dev_cq, _dev_qp);
     return Status::OK();
+}
+
+HiRDMA::HiRDMA(struct ibv_device* dev, struct ibv_context* ctx, struct ibv_pd* pd, struct ibv_cq* cq, struct ibv_qp* qp)
+    : dev_(dev)
+    , dev_ctx_(ctx)
+    , dev_pd_(pd)
+    , dev_cq_(cq)
+    , dev_qp_(qp)
+{
 }
 
 HiRDMABuffer* HiRDMA::RegisterRDMABuffer(size_t size, int access_mode)
