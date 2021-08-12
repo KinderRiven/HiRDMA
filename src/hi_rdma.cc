@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-12 18:05:20
+ * @LastEditTime: 2021-08-12 18:17:22
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -31,7 +31,7 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     /* device */
     for (int i = 0; i < _num_dev; i++) {
         _dev = _dev_list[i];
-        if (_dev->name == options.dev_name) {
+        if (!strcmp(_dev->name, options.dev_name.c_str())) {
             _dev_ctx = ibv_open_device(_dev);
             if (_dev_ctx != nullptr) {
                 return Status::IOError("open device failed.");
