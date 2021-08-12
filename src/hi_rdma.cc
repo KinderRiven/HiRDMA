@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-12 18:22:32
+ * @LastEditTime: 2021-08-12 20:21:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -58,10 +58,10 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     _qp_init_attr.sq_sig_all = 1;
     _qp_init_attr.send_cq = _dev_cq;
     _qp_init_attr.recv_cq = _dev_cq;
-    _qp_init_attr.cap.max_send_wr = 128;
-    _qp_init_attr.cap.max_recv_wr = 128;
-    _qp_init_attr.cap.max_send_sge = 128;
-    _qp_init_attr.cap.max_recv_sge = 128;
+    _qp_init_attr.cap.max_send_wr = 32;
+    _qp_init_attr.cap.max_recv_wr = 32;
+    _qp_init_attr.cap.max_send_sge = 32;
+    _qp_init_attr.cap.max_recv_sge = 32;
     _dev_qp = ibv_create_qp(_dev_pd, &_qp_init_attr);
     if (_dev_qp == nullptr) {
         return Status::IOError("create qp failed.");
