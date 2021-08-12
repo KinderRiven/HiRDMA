@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-11 16:46:20
+ * @LastEditTime: 2021-08-12 17:34:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -47,7 +47,15 @@ public: // verb
     Status Read(HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size);
 
 private:
+    struct ibv_device* dev_;
+
     struct ibv_context* dev_ctx_;
+
+    struct ibv_pd* dev_pd_;
+
+    struct ibv_cq* dev_cq_;
+
+    struct ibv_qp* dev_qp_;
 };
 
 };
