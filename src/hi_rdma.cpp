@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-12 17:49:18
+ * @LastEditTime: 2021-08-12 17:57:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -18,6 +18,9 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     struct ibv_device* _dev = nullptr;
     struct ibv_context* _dev_ctx = nullptr;
     struct ibv_device** _dev_list = nullptr;
+    struct ibv_pd* _dev_pd = nullptr;
+    struct ibv_cq* _dev_cq = nullptr;
+    struct ibv_qp* _dev_qp = nullptr;
 
     /* device list */
     _dev_list = ibv_get_device_list(&_num_dev);
@@ -29,23 +32,22 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     for (int i = 0; i < _num_dev; i++) {
         _dev = _dev_list[i];
         if (_dev->name == options.dev_name) {
-            dev_ = _dev;
-            dev_ctx_ = ibv_open_device(dev_);
-            if (dev_ctx_ != nullptr) {
+            _dev_ctx = ibv_open_device(_dev);
+            if (_dev_ctx != nullptr) {
                 return Status::IOError();
             }
         }
     }
 
     /* pd */
-    dev_pd_ = ibv_alloc_pd(dev_ctx_);
-    if (dev_pd_ == nullptr) {
+    _dev_pd = ibv_alloc_pd(dev_ctx_);
+    if (_dev_pd == nullptr) {
         return Status::IOError();
     }
 
     /* create cq */
-    dev_cq_ = ibv_create_cq(dev_ctx_, 1, nullptr, nullptr, 0);
-    if (dev_cq_ == nullptr) {
+    _dev_cq = ibv_create_cq(_dev_ctx, 1, nullptr, nullptr, 0);
+    if (_dev_cq == nullptr) {
         return Status::IOError();
     }
 
@@ -61,8 +63,8 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     _qp_init_attr.cap.max_send_sge = 128;
     _qp_init_attr.cap.max_recv_sge = 128;
 
-    dev_qp_ = ibv_create_qp(dev_pd_, &_qp_init_attr);
-    if (dev_qp_ == nullptr) {
+    _dev_qp = ibv_create_qp(_dev_pd, &_qp_init_attr);
+    if (_dev_qp == nullptr) {
         return Status::IOError();
     }
     return Status::OK();
