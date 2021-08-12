@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-12 17:59:00
+ * @LastEditTime: 2021-08-12 17:59:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -40,7 +40,7 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     }
 
     /* pd */
-    _dev_pd = ibv_alloc_pd(dev_ctx_);
+    _dev_pd = ibv_alloc_pd(_dev_ctx);
     if (_dev_pd == nullptr) {
         return Status::IOError("allocate pd failed.");
     }
