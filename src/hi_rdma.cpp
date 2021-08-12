@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-12 17:59:33
+ * @LastEditTime: 2021-08-12 18:05:20
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -56,8 +56,8 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     memset(&_qp_init_attr, 0, sizeof(_qp_init_attr));
     _qp_init_attr.qp_type = IBV_QPT_RC;
     _qp_init_attr.sq_sig_all = 1;
-    _qp_init_attr.send_cq = dev_cq_;
-    _qp_init_attr.recv_cq = dev_cq_;
+    _qp_init_attr.send_cq = _dev_cq;
+    _qp_init_attr.recv_cq = _dev_cq;
     _qp_init_attr.cap.max_send_wr = 128;
     _qp_init_attr.cap.max_recv_wr = 128;
     _qp_init_attr.cap.max_send_sge = 128;
