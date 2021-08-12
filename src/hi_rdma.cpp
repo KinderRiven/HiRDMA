@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-12 17:57:20
+ * @LastEditTime: 2021-08-12 17:59:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -25,7 +25,7 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     /* device list */
     _dev_list = ibv_get_device_list(&_num_dev);
     if (_num_dev == 0) {
-        return Status::IOError();
+        return Status::IOError("get device list failed.");
     }
 
     /* device */
@@ -34,7 +34,7 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
         if (_dev->name == options.dev_name) {
             _dev_ctx = ibv_open_device(_dev);
             if (_dev_ctx != nullptr) {
-                return Status::IOError();
+                return Status::IOError("open device failed.");
             }
         }
     }
@@ -42,13 +42,13 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     /* pd */
     _dev_pd = ibv_alloc_pd(dev_ctx_);
     if (_dev_pd == nullptr) {
-        return Status::IOError();
+        return Status::IOError("allocate pd failed.");
     }
 
     /* create cq */
     _dev_cq = ibv_create_cq(_dev_ctx, 1, nullptr, nullptr, 0);
     if (_dev_cq == nullptr) {
-        return Status::IOError();
+        return Status::IOError("create cq failed.");
     }
 
     /* create qp */
@@ -64,7 +64,7 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     _qp_init_attr.cap.max_recv_sge = 128;
     _dev_qp = ibv_create_qp(_dev_pd, &_qp_init_attr);
     if (_dev_qp == nullptr) {
-        return Status::IOError();
+        return Status::IOError("create qp failed.");
     }
     return Status::OK();
 }
