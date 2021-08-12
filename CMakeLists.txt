@@ -12,8 +12,8 @@ include_directories(
 )
 
 set(SRC
-    ${SRC_BASE}/src/hi_rdma.cpp
-    ${SRC_BASE}/src/status.cpp
+    ${SRC_BASE}/src/hi_rdma.cc
+    ${SRC_BASE}/src/status.cc
 )
 
 set(LIBS
