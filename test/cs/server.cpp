@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-17 15:46:25
+ * @LastEditTime: 2021-08-17 15:53:14
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -37,6 +37,7 @@ int main(int argc, char** argv)
 
     int sock_fd = hi_rdma::Socket::Accept(server_port);
     if (sock_fd != -1) {
+        printf("accept = %d\n", sock_fd);
         hi_rdma::HiRDMAQPInfo _remote_qp;
         hi_rdma::HiRDMAQPInfo* _local_qp = _hi_rdma->AcquireQPInfo();
         hi_rdma::Socket::Read(sock_fd, (char*)&_remote_qp, sizeof(hi_rdma::HiRDMAQPInfo));
