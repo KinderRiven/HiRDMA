@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 11:28:36
+ * @LastEditTime: 2021-08-17 11:30:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -80,7 +80,7 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     return Status::OK();
 }
 
-HiRDMA::HiRDMA(std::string dev_name, int dev_port, int dev_index, struct ibv_device* dev, struct ibv_context* ctx, struct ibv_pd* pd, struct ibv_cq* cq, struct ibv_qp* qp)
+HiRDMA::HiRDMA(std::string &dev_name, int dev_port, int dev_index, struct ibv_device* dev, struct ibv_context* ctx, struct ibv_pd* pd, struct ibv_cq* cq, struct ibv_qp* qp)
     : dev_name_(dev_name)
     , dev_port_(dev_port)
     , dev_idx_(dev_index)
