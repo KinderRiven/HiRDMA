@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-17 11:59:52
+ * @LastEditTime: 2021-08-17 13:07:40
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -23,13 +23,13 @@ public:
     {
     }
 
-    char* buf() { return (char*)mr_.addr; }
+    char* buf() { return (char*)mr_->addr; }
 
-    int length() { return mr_.length; }
+    int length() { return mr_->length; }
 
-    int lkey() { return mr_.lkey; }
+    int lkey() { return mr_->lkey; }
 
-    int rkey() { return mr_.rkey; }
+    int rkey() { return mr_->rkey; }
 
     struct ibv_mr* mr() { return mr_; }
 
