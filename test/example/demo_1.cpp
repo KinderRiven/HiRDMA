@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-17 13:15:58
+ * @LastEditTime: 2021-08-17 13:18:48
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -26,7 +26,7 @@ int main(int argc, char** argv)
         hi_rdma::LOCAL_WR | hi_rdma::REMOTE_RD | hi_rdma::REMOTE_WR);
     if (_rbuf != nullptr) {
         printf("RegisterRDMABuffer Success!s\n");
-        printf("[addr:%llx][length:%d]\n", (uint64_t)_rbuf->buf(), _rbuf->length());
+        printf("[addr:0x%llx][length:%.2fMB]\n", (uint64_t)_rbuf->buf(), 1.0 * _rbuf->length() / (1024 * 1024));
         printf("[lkey:%d][rkey:%d]\n", _rbuf->lkey(), _rbuf->rkey());
     } else {
         printf("RegisterRDMABuffer Failed!\n");
