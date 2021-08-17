@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-17 14:18:33
- * @LastEditTime: 2021-08-17 14:58:33
+ * @LastEditTime: 2021-08-17 15:05:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/sock.cc
@@ -11,7 +11,7 @@
 
 using namespace hi_rdma;
 
-static int Socket::Connect(std::string& ip, std::string& port)
+static int Socket::Connect(const char* ip, const char* port)
 {
     struct addrinfo hints;
     struct addrinfo *result, *rp;
@@ -19,7 +19,7 @@ static int Socket::Connect(std::string& ip, std::string& port)
     memset(&hints, 0, sizeof(struct addrinfo));
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_family = AF_UNSPEC;
-    ret = getaddrinfo(ip.c_str(), port.c_str(), &hints, &result);
+    ret = getaddrinfo(ip, port, &hints, &result);
 
     for (rp = result; rp != NULL; rp = rp->ai_next) {
         sock_fd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
@@ -37,7 +37,7 @@ static int Socket::Connect(std::string& ip, std::string& port)
     return sock_fd;
 }
 
-static int Socket::Accept(std::string& port)
+static int Socket::Accept(const char* port)
 {
     struct addrinfo hints;
     struct addrinfo *result, *rp;
@@ -48,7 +48,7 @@ static int Socket::Accept(std::string& port)
     hints.ai_family = AF_UNSPEC;
     hints.ai_flags = AI_PASSIVE;
 
-    ret = getaddrinfo(NULL, port.c_str(), &hints, &result);
+    ret = getaddrinfo(NULL, port, &hints, &result);
     if (ret) {
         return -1;
     }
