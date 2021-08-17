@@ -1,13 +1,15 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-17 13:26:18
+ * @LastEditTime: 2021-08-17 15:09:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
  */
 
+#include "config.hpp"
 #include "hi_rdma.hpp"
+#include "sock.hpp"
 
 int main(int argc, char** argv)
 {
@@ -32,5 +34,8 @@ int main(int argc, char** argv)
             printf(">> RegisterRDMABuffer Failed!\n");
         }
     }
+
+    int sock_fd = hi_rdma::Socket::Accept(server_port);
+    printf("%d\n", sock_fd);
     return 0;
 }
