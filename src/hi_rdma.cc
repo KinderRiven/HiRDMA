@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 11:20:07
+ * @LastEditTime: 2021-08-17 11:28:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -75,13 +75,16 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
         return Status::IOError("create qp failed.");
     }
 
-    *context = new HiRDMA(_dev, _dev_ctx, _dev_pd, _dev_cq, _dev_qp);
+    *context = new HiRDMA(options.dev_namem, options.dev_port, options.dev_idx, _dev, _dev_ctx, _dev_pd, _dev_cq, _dev_qp);
     (*context)->PrintInfo();
     return Status::OK();
 }
 
-HiRDMA::HiRDMA(struct ibv_device* dev, struct ibv_context* ctx, struct ibv_pd* pd, struct ibv_cq* cq, struct ibv_qp* qp)
-    : dev_(dev)
+HiRDMA::HiRDMA(std::string dev_name, int dev_port, int dev_index, struct ibv_device* dev, struct ibv_context* ctx, struct ibv_pd* pd, struct ibv_cq* cq, struct ibv_qp* qp)
+    : dev_name_(dev_name)
+    , dev_port_(dev_port)
+    , dev_idx_(dev_index)
+    , dev_(dev)
     , dev_ctx_(ctx)
     , dev_pd_(pd)
     , dev_cq_(cq)
@@ -111,9 +114,10 @@ void HiRDMA::PrintInfo()
     struct ibv_device_attr _dev_attr;
 
     ibv_query_device(dev_ctx_, &_dev_attr);
-    ibv_query_port(dev_ctx_, options.dev_port, &_port_attr);
+    ibv_query_port(dev_ctx_, dev_port_, &_port_attr);
 
     printf(">>[HiRDMA]\n");
+    printf("  [name:%s][port:%d][index:%d]\n", dev_name_.c_str(), dev_port_, dev_idx_);
     printf("  [max_qp:%d][max_qp_wr:%d]\n", _dev_attr.max_qp, _dev_attr.max_qp_wr);
     printf("  [max_seg:%d][max_seg_rd:%d]\n", _dev_attr.max_sge, _dev_attr.max_sge_rd);
     printf("  [max_cq:%d][max_cqe:%d]\n", _dev_attr.max_cq, _dev_attr.max_cqe);

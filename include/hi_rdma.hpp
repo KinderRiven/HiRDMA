@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-17 10:49:58
+ * @LastEditTime: 2021-08-17 11:23:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -54,6 +54,10 @@ private:
     HiRDMA(struct ibv_device* dev, struct ibv_context* ctx, struct ibv_pd* pd, struct ibv_cq* cq, struct ibv_qp* qp);
 
 private:
+    std::string dev_name_;
+    int dev_port_;
+    int dev_idx_;
+
     struct ibv_device* dev_;
     struct ibv_context* dev_ctx_;
 
