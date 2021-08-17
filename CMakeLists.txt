@@ -14,6 +14,7 @@ include_directories(
 set(SRC
     ${SRC_BASE}/src/hi_rdma.cc
     ${SRC_BASE}/src/status.cc
+    ${SRC_BASE}/src/sock.cc
 )
 
 set(LIBS
