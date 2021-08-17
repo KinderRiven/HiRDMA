@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 13:55:24
+ * @LastEditTime: 2021-08-17 14:07:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -10,6 +10,61 @@
 #include "hi_rdma.hpp"
 
 using namespace hi_rdma;
+
+int HiRDMA::modify_qp_to_init(HiRDMAQPInfo* qp_info)
+{
+    struct ibv_qp_attr attr;
+    int flags;
+    memset(&attr, 0, sizeof(attr));
+    attr.qp_state = IBV_QPS_INIT;
+    attr.port_num = 1;
+    attr.pkey_index = 0;
+    attr.qp_access_flags = IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_READ | IBV_ACCESS_REMOTE_WRITE;
+    flags = IBV_QP_STATE | IBV_QP_PKEY_INDEX | IBV_QP_PORT | IBV_QP_ACCESS_FLAGS;
+    return ibv_modify_qp(qp_info->qp_, &attr, flags);
+}
+
+int HiRDMA::modify_qp_to_rtr(HiRDMAQPInfo* qp_info)
+{
+    struct ibv_qp_attr attr;
+    int flags;
+    memset(&attr, 0, sizeof(attr));
+    attr.qp_state = IBV_QPS_RTR;
+    attr.path_mtu = IBV_MTU_256;
+    attr.dest_qp_num = qp_info->qp_num_; // qp number
+    attr.rq_psn = 0;
+    attr.max_dest_rd_atomic = 1;
+    attr.min_rnr_timer = 0x12;
+    attr.ah_attr.is_global = 0;
+    attr.ah_attr.dlid = qp_info->lid_;
+    attr.ah_attr.sl = 0;
+    attr.ah_attr.src_path_bits = 0;
+    attr.ah_attr.port_num = qp_info->port_num_; // port number
+    attr.ah_attr.is_global = 1;
+    attr.ah_attr.port_num = qp_info->port_num_; // port number
+    memcpy(&attr.ah_attr.grh.dgid, qp_info->gid_ 16); // GID
+    attr.ah_attr.grh.flow_label = 0;
+    attr.ah_attr.grh.hop_limit = 1;
+    attr.ah_attr.grh.sgid_index = qp_info->idx_;
+    attr.ah_attr.grh.traffic_class = 0;
+    flags = IBV_QP_STATE | IBV_QP_AV | IBV_QP_PATH_MTU | IBV_QP_DEST_QPN | IBV_QP_RQ_PSN | IBV_QP_MAX_DEST_RD_ATOMIC | IBV_QP_MIN_RNR_TIMER;
+    return ibv_modify_qp(qp, &attr, flags);
+}
+
+int HiRDMA::modify_qp_to_rts(HiRDMAQPInfo* qp_info)
+{
+    int flags;
+    struct ibv_qp_attr attr;
+    memset(&attr, 0, sizeof(attr));
+    attr.qp_state = IBV_QPS_RTS;
+    attr.timeout = 12;
+    attr.retry_cnt = 6;
+    attr.rnr_retry = 0;
+    attr.sq_psn = 0;
+    attr.max_rd_atomic = 1;
+    flags = IBV_QP_STATE | IBV_QP_TIMEOUT | IBV_QP_RETRY_CNT | IBV_QP_RNR_RETRY | IBV_QP_SQ_PSN | IBV_QP_MAX_QP_RD_ATOMIC;
+    return ibv_modify_qp(qp_info->qp_, &attr, flags);
+}
 
 Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
 {
@@ -106,6 +161,9 @@ HiRDMABuffer* HiRDMA::RegisterRDMABuffer(size_t size, int access_mode)
 
 Status HiRDMA::ConnectQP(HiRDMAQPInfo* qp_info)
 {
+    modify_qp_to_init(qp_info);
+    modify_qp_to_rtr(qp_info);
+    modify_qp_to_rts(qp_info);
 }
 
 Status HiRDMA::PollQP()

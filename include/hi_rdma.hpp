@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-17 13:55:10
+ * @LastEditTime: 2021-08-17 14:04:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -16,6 +16,8 @@
 
 namespace hi_rdma {
 
+class HiRDMA;
+
 enum access_mode_t {
     LOCAL_WR = IBV_ACCESS_LOCAL_WRITE,
     REMOTE_WR = IBV_ACCESS_REMOTE_WRITE,
@@ -24,18 +26,26 @@ enum access_mode_t {
 
 struct HiRDMAQPInfo {
 public:
-    HiRDMAQPInfo(int qp_num, int lid, struct ibv_qp* qp, union ibv_gid* gid)
-        : qp_num_(qp_num)
+    HiRDMAQPInfo(int port_num, int idx, int qp_num, int lid, struct ibv_qp* qp, union ibv_gid* gid)
+        : port_num_(port_num)
+        , qp_num_(qp_num)
+        , idx_(idx)
         , lid_(lid)
         , qp_(qp)
     {
         memcpy((void*)gid_, (void*)gid, 16);
     }
 
+    friend class HiRDMA;
+
 private:
     int lid_;
 
     int qp_num_;
+
+    int port_num_;
+
+    int idx_;
 
     struct ibv_qp* qp_;
 
@@ -84,7 +94,17 @@ public: // verb
     Status Read(HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size);
 
 private:
+    // only support private initlizate
     HiRDMA(std::string& dev_name, int dev_port, int dev_index, struct ibv_device* dev, struct ibv_context* ctx, struct ibv_pd* pd, struct ibv_cq* cq, struct ibv_qp* qp);
+
+    // Transition a QP from the RESET to INIT state
+    int modify_qp_to_init(HiRDMAQPInfo* qp_info);
+
+    // Transition a QP from the INIT to RTR state, using the specified QP number
+    int modify_qp_to_rtr(HiRDMAQPInfo* qp_info);
+
+    // Transition a QP from the RTR to RTS state
+    int modify_qp_to_rts(HiRDMAQPInfo* qp_info);
 
 private:
     std::string dev_name_;
