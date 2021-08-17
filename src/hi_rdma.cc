@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 11:28:04
+ * @LastEditTime: 2021-08-17 11:28:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -75,7 +75,7 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
         return Status::IOError("create qp failed.");
     }
 
-    *context = new HiRDMA(options.dev_namem, options.dev_port, options.dev_idx, _dev, _dev_ctx, _dev_pd, _dev_cq, _dev_qp);
+    *context = new HiRDMA(options.dev_name, options.dev_port, options.dev_idx, _dev, _dev_ctx, _dev_pd, _dev_cq, _dev_qp);
     (*context)->PrintInfo();
     return Status::OK();
 }
