@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 15:36:33
+ * @LastEditTime: 2021-08-17 15:38:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -164,7 +164,7 @@ HiRDMABuffer* HiRDMA::RegisterRDMABuffer(size_t size, int access_mode)
 
 HiRDMAQPInfo* HiRDMA::AcquireQPInfo()
 {
-    return new HiRDMAQPInfo(dev_port_, dev_idx_, dev_qp_->qp_num, lid_, dev_qp_, gid_);
+    return new HiRDMAQPInfo(dev_port_, dev_idx_, dev_qp_->qp_num, lid_, dev_qp_, &gid_);
 }
 
 Status HiRDMA::ConnectQP(HiRDMAQPInfo* qp_info)
