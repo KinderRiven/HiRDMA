@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-17 16:03:35
+ * @LastEditTime: 2021-08-17 16:16:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -44,6 +44,12 @@ int main(int argc, char** argv)
         hi_rdma::Socket::Read(sock_fd, (char*)&_remote_qp, sizeof(hi_rdma::HiRDMAQPInfo));
         _local_qp->Print();
         _remote_qp.Print();
+        _status = _hi_rdma->ConnectQP(&_remote_qp);
+        if (_status.ok()) {
+            printf(">> Connect QP Success!\n");
+        } else {
+            printf(">> Connect QP Failed!\n");
+        }
     }
     return 0;
 }
