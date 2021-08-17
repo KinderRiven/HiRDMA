@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-17 14:04:31
+ * @LastEditTime: 2021-08-17 15:35:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -80,6 +80,8 @@ public: // initlizate
 
     HiRDMABuffer* RegisterRDMABuffer(size_t size, int access_mode);
 
+    HiRDMAQPInfo* AcquireQPInfo();
+
     Status ConnectQP(HiRDMAQPInfo* qp_info);
 
     Status PollQP();
@@ -113,7 +115,11 @@ private:
 
     int dev_idx_;
 
+    int lid_;
+
     struct ibv_device* dev_;
+
+    union ibv_gid gid_;
 
     struct ibv_context* dev_ctx_;
 

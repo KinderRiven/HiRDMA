@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 14:21:21
+ * @LastEditTime: 2021-08-17 15:35:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -144,6 +144,10 @@ HiRDMA::HiRDMA(std::string& dev_name, int dev_port, int dev_index, struct ibv_de
     , dev_cq_(cq)
     , dev_qp_(qp)
 {
+    struct ibv_port_attr _port_attr;
+    ibv_query_port(dev_ctx_, dev_port_, &_port_attr);
+    lid_ = _port_attr.lid;
+    ibv_query_gid(dev_ctx_, dev_port_, dev_idx_, gid_);
 }
 
 HiRDMABuffer* HiRDMA::RegisterRDMABuffer(size_t size, int access_mode)
@@ -156,6 +160,11 @@ HiRDMABuffer* HiRDMA::RegisterRDMABuffer(size_t size, int access_mode)
         HiRDMABuffer* _rbuf = new HiRDMABuffer(_mr);
         return _rbuf;
     }
+}
+
+HiRDMAQPInfo* HiRDMA::AcquireQPInfo()
+{
+    return new HiRDMAQPInfo(dev_port_, dev_idx_, dev_qp_->qp_num, lid_, dev_qp_, gid_);
 }
 
 Status HiRDMA::ConnectQP(HiRDMAQPInfo* qp_info)
