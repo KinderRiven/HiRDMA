@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 12:00:12
+ * @LastEditTime: 2021-08-17 13:55:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -104,11 +104,7 @@ HiRDMABuffer* HiRDMA::RegisterRDMABuffer(size_t size, int access_mode)
     }
 }
 
-Status HiRDMA::ExchangeQPInfo()
-{
-}
-
-Status HiRDMA::ConnectQP()
+Status HiRDMA::ConnectQP(HiRDMAQPInfo* qp_info)
 {
 }
 
