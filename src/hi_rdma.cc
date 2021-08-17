@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 11:37:24
+ * @LastEditTime: 2021-08-17 11:39:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -66,8 +66,8 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     _qp_init_attr.sq_sig_all = 1;
     _qp_init_attr.send_cq = _dev_cq;
     _qp_init_attr.recv_cq = _dev_cq;
-    _qp_init_attr.cap.max_send_wr = _dev_attr.max_qp_wr;
-    _qp_init_attr.cap.max_recv_wr = _dev_attr.max_qp_wr;
+    _qp_init_attr.cap.max_send_wr = 1; // _dev_attr.max_qp_wr;
+    _qp_init_attr.cap.max_recv_wr = 1; // _dev_attr.max_qp_wr;
     _qp_init_attr.cap.max_send_sge = 1;
     _qp_init_attr.cap.max_recv_sge = 1;
     _dev_qp = ibv_create_qp(_dev_pd, &_qp_init_attr);
@@ -80,7 +80,7 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     return Status::OK();
 }
 
-HiRDMA::HiRDMA(std::string &dev_name, int dev_port, int dev_index, struct ibv_device* dev, struct ibv_context* ctx, struct ibv_pd* pd, struct ibv_cq* cq, struct ibv_qp* qp)
+HiRDMA::HiRDMA(std::string& dev_name, int dev_port, int dev_index, struct ibv_device* dev, struct ibv_context* ctx, struct ibv_pd* pd, struct ibv_cq* cq, struct ibv_qp* qp)
     : dev_name_(dev_name)
     , dev_port_(dev_port)
     , dev_idx_(dev_index)
