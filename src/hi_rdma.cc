@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 11:18:48
+ * @LastEditTime: 2021-08-17 11:20:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -76,8 +76,7 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     }
 
     *context = new HiRDMA(_dev, _dev_ctx, _dev_pd, _dev_cq, _dev_qp);
-    context->PrintInfo();
-
+    (*context)->PrintInfo();
     return Status::OK();
 }
 
@@ -118,7 +117,7 @@ void HiRDMA::PrintInfo()
     printf("  [max_qp:%d][max_qp_wr:%d]\n", _dev_attr.max_qp, _dev_attr.max_qp_wr);
     printf("  [max_seg:%d][max_seg_rd:%d]\n", _dev_attr.max_sge, _dev_attr.max_sge_rd);
     printf("  [max_cq:%d][max_cqe:%d]\n", _dev_attr.max_cq, _dev_attr.max_cqe);
-    printf("  [max_mr:%d][max_pd:%d]\n", _dev_attr.max_mr,  _dev_attr.max_pd);
+    printf("  [max_mr:%d][max_pd:%d]\n", _dev_attr.max_mr, _dev_attr.max_pd);
 }
 
 Status HiRDMA::Write(HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size)
