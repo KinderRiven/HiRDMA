@@ -1,7 +1,7 @@
 all: client server
 
-client:
-	g++ -std=c++11 server.cpp -o server -I../../include -L../../build -lHIRDMA -libverbs
-
 server:
-	g++ -std=c++11 client.cpp -o client -I../../include -L../../build -lHIRDMA -libverbs
+	g++ -std=c++11 server.cpp -o run_server -I../../include -L../../build -lHIRDMA -libverbs
+
+client:
+	g++ -std=c++11 client.cpp -o run_client -I../../include -L../../build -lHIRDMA -libverbs
