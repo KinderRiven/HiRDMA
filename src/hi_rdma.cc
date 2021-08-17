@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 11:39:52
+ * @LastEditTime: 2021-08-17 11:52:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -66,8 +66,8 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     _qp_init_attr.sq_sig_all = 1;
     _qp_init_attr.send_cq = _dev_cq;
     _qp_init_attr.recv_cq = _dev_cq;
-    _qp_init_attr.cap.max_send_wr = 1; // _dev_attr.max_qp_wr;
-    _qp_init_attr.cap.max_recv_wr = 1; // _dev_attr.max_qp_wr;
+    _qp_init_attr.cap.max_send_wr = 1; // _dev_attr.max_qp_wr; [???]
+    _qp_init_attr.cap.max_recv_wr = 1; // _dev_attr.max_qp_wr; [???]
     _qp_init_attr.cap.max_send_sge = 1;
     _qp_init_attr.cap.max_recv_sge = 1;
     _dev_qp = ibv_create_qp(_dev_pd, &_qp_init_attr);
@@ -94,6 +94,10 @@ HiRDMA::HiRDMA(std::string& dev_name, int dev_port, int dev_index, struct ibv_de
 
 HiRDMABuffer* HiRDMA::RegisterRDMABuffer(size_t size, int access_mode)
 {
+    char* _buf = new char[size];
+    struct ibv_mr* _mr = ibv_reg_mr(dev_pd_, _buf, size, access_mode);
+    HiRDMABuffer* _rbuf = new HiRDMABuffer(_buf, _mr);
+    return _rbuf;
 }
 
 Status HiRDMA::ExchangeQPInfo()

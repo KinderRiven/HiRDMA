@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-12 18:19:13
+ * @LastEditTime: 2021-08-17 11:52:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -21,5 +21,8 @@ int main(int argc, char** argv)
         printf("CreateRDMAContext Failed!\n");
         printf("%s\n", _status.ToString().c_str());
     }
+
+    hi_rdma::HiRDMABuffer* _rbuf = _hi_rdma->RegisterRDMABuffer(1024UL * 1024,
+        IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_READ | IBV_ACCESS_REMOTE_WRITE);
     return 0;
 }
