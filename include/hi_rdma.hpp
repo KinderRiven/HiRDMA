@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-17 16:14:05
+ * @LastEditTime: 2021-08-17 16:24:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -97,7 +97,7 @@ public: // initlizate
 
     HiRDMAQPInfo* AcquireQPInfo();
 
-    Status ConnectQP(HiRDMAQPInfo* qp_info);
+    Status ConnectQP(HiRDMAQPInfo* local_qp, HiRDMAQPInfo* remote_qp);
 
     Status PollQP();
 
@@ -115,13 +115,13 @@ private:
     HiRDMA(std::string& dev_name, int dev_port, int dev_index, struct ibv_device* dev, struct ibv_context* ctx, struct ibv_pd* pd, struct ibv_cq* cq, struct ibv_qp* qp);
 
     // Transition a QP from the RESET to INIT state
-    int modify_qp_to_init(HiRDMAQPInfo* qp_info);
+    int modify_qp_to_init(struct ibv_qp* qp);
 
     // Transition a QP from the INIT to RTR state, using the specified QP number
-    int modify_qp_to_rtr(HiRDMAQPInfo* qp_info);
+    int modify_qp_to_rtr(struct ibv_qp* qp, uint32_t remote_port, uint32_t remote_idx, uint32_t remote_qp_num, uint16_t remote_lid, uint8_t* remote_gid);
 
     // Transition a QP from the RTR to RTS state
-    int modify_qp_to_rts(HiRDMAQPInfo* qp_info);
+    int modify_qp_to_rts(struct ibv_qp* qp);
 
 private:
     std::string dev_name_;

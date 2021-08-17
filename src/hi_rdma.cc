@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 15:38:50
+ * @LastEditTime: 2021-08-17 16:27:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -11,7 +11,7 @@
 
 using namespace hi_rdma;
 
-int HiRDMA::modify_qp_to_init(HiRDMAQPInfo* qp_info)
+int HiRDMA::modify_qp_to_init(struct ibv_qp* qp)
 {
     struct ibv_qp_attr attr;
     int flags;
@@ -21,36 +21,36 @@ int HiRDMA::modify_qp_to_init(HiRDMAQPInfo* qp_info)
     attr.pkey_index = 0;
     attr.qp_access_flags = IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_READ | IBV_ACCESS_REMOTE_WRITE;
     flags = IBV_QP_STATE | IBV_QP_PKEY_INDEX | IBV_QP_PORT | IBV_QP_ACCESS_FLAGS;
-    return ibv_modify_qp(qp_info->qp_, &attr, flags);
+    return ibv_modify_qp(qp, &attr, flags);
 }
 
-int HiRDMA::modify_qp_to_rtr(HiRDMAQPInfo* qp_info)
+int HiRDMA::modify_qp_to_rtr(struct ibv_qp* qp, uint32_t remote_port, uint32_t remote_idx, uint32_t remote_qp_num, uint16_t remote_lid, uint8_t* remote_gid)
 {
     struct ibv_qp_attr attr;
     int flags;
     memset(&attr, 0, sizeof(attr));
     attr.qp_state = IBV_QPS_RTR;
     attr.path_mtu = IBV_MTU_256;
-    attr.dest_qp_num = qp_info->qp_num_; // qp number
+    attr.dest_qp_num = remote_qp_num; // qp number
     attr.rq_psn = 0;
     attr.max_dest_rd_atomic = 1;
     attr.min_rnr_timer = 0x12;
     attr.ah_attr.is_global = 0;
-    attr.ah_attr.dlid = qp_info->lid_; // lid
+    attr.ah_attr.dlid = remote_lid; // lid
     attr.ah_attr.sl = 0;
     attr.ah_attr.src_path_bits = 0;
-    attr.ah_attr.port_num = qp_info->port_num_; // port number
+    attr.ah_attr.port_num = remote_port; // port number
     attr.ah_attr.is_global = 1;
-    memcpy(&attr.ah_attr.grh.dgid, qp_info->gid_, 16); // GID
+    memcpy(&attr.ah_attr.grh.dgid, remote_gid, 16); // GID
     attr.ah_attr.grh.flow_label = 0;
     attr.ah_attr.grh.hop_limit = 1;
-    attr.ah_attr.grh.sgid_index = qp_info->idx_; // index
+    attr.ah_attr.grh.sgid_index = remote_idx; // index
     attr.ah_attr.grh.traffic_class = 0;
     flags = IBV_QP_STATE | IBV_QP_AV | IBV_QP_PATH_MTU | IBV_QP_DEST_QPN | IBV_QP_RQ_PSN | IBV_QP_MAX_DEST_RD_ATOMIC | IBV_QP_MIN_RNR_TIMER;
     return ibv_modify_qp(qp_info->qp_, &attr, flags);
 }
 
-int HiRDMA::modify_qp_to_rts(HiRDMAQPInfo* qp_info)
+int HiRDMA::modify_qp_to_rts(struct ibv_qp* qp)
 {
     int flags;
     struct ibv_qp_attr attr;
@@ -62,7 +62,7 @@ int HiRDMA::modify_qp_to_rts(HiRDMAQPInfo* qp_info)
     attr.sq_psn = 0;
     attr.max_rd_atomic = 1;
     flags = IBV_QP_STATE | IBV_QP_TIMEOUT | IBV_QP_RETRY_CNT | IBV_QP_RNR_RETRY | IBV_QP_SQ_PSN | IBV_QP_MAX_QP_RD_ATOMIC;
-    return ibv_modify_qp(qp_info->qp_, &attr, flags);
+    return ibv_modify_qp(qp, &attr, flags);
 }
 
 Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
@@ -167,20 +167,20 @@ HiRDMAQPInfo* HiRDMA::AcquireQPInfo()
     return new HiRDMAQPInfo(dev_port_, dev_idx_, dev_qp_->qp_num, lid_, dev_qp_, &gid_);
 }
 
-Status HiRDMA::ConnectQP(HiRDMAQPInfo* qp_info)
+Status HiRDMA::ConnectQP(HiRDMAQPInfo* local_qp, HiRDMAQPInfo* remote_qp)
 {
     int _res;
-    _res = modify_qp_to_init(qp_info);
+    _res = modify_qp_to_init(local_qp->qp_);
     if (_res) {
         return Status::IOError("modify qp to init failed.");
     }
 
-    _res = modify_qp_to_rtr(qp_info);
+    _res = modify_qp_to_rtr(local_qp->qp_, remote_qp->port_num_, remote_qp->idx_, remote_qp->qp_num_, remote_qp->lid_, remote_qp->gid_);
     if (_res) {
         return Status::IOError("modify qp to rtr failed.");
     }
 
-    _res = modify_qp_to_rts(qp_info);
+    _res = modify_qp_to_rts(local_qp->qp_);
     if (_res) {
         return Status::IOError("modify qp to rts failed.");
     }
