@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-17 15:53:24
+ * @LastEditTime: 2021-08-17 16:03:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -42,6 +42,8 @@ int main(int argc, char** argv)
         hi_rdma::HiRDMAQPInfo* _local_qp = _hi_rdma->AcquireQPInfo();
         hi_rdma::Socket::Write(sock_fd, (char*)_local_qp, sizeof(hi_rdma::HiRDMAQPInfo));
         hi_rdma::Socket::Read(sock_fd, (char*)&_remote_qp, sizeof(hi_rdma::HiRDMAQPInfo));
+        _local_qp->Print();
+        _remote_qp.Print();
     }
     return 0;
 }

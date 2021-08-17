@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-17 15:43:49
+ * @LastEditTime: 2021-08-17 16:03:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -36,6 +36,12 @@ public:
         , qp_(qp)
     {
         memcpy((void*)gid_, (void*)gid, 16);
+    }
+
+    void Print()
+    {
+        printf(">>[HiRDMAQP]\n");
+        printf("  [port:%d][idx:%d][lid:%d][qp_num:%d]\n", port_num_, idx_, lid_, qp_num_);
     }
 
     friend class HiRDMA;
