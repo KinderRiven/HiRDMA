@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-17 16:03:09
+ * @LastEditTime: 2021-08-17 16:12:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -65,6 +65,13 @@ public:
     HiRDMABuffer(struct ibv_mr* mr)
         : mr_(mr)
     {
+    }
+
+    void Print()
+    {
+        printf(">>[HiRDMABuffer]\n");
+        printf("  [addr:0x%llx][length:%.2fMB]\n", (uint64_t)_rbuf->buf(), 1.0 * _rbuf->length() / (1024 * 1024));
+        printf("  [lkey:%d][rkey:%d]\n", _rbuf->lkey(), _rbuf->rkey());
     }
 
     char* buf() { return (char*)mr_->addr; }
