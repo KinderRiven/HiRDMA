@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-17 11:53:13
+ * @LastEditTime: 2021-08-17 11:59:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -18,19 +18,22 @@ namespace hi_rdma {
 
 class HiRDMABuffer {
 public:
-    HiRDMABuffer(char* buf, struct ibv_mr* mr)
-        : buf_(buf)
-        , mr_(mr)
+    HiRDMABuffer(struct ibv_mr* mr)
+        : mr_(mr)
     {
     }
 
-    char* buf() { return buf_; }
+    char* buf() { return (char*)mr_.addr; }
+
+    int length() { return mr_.length; }
+
+    int lkey() { return mr_.lkey; }
+
+    int rkey() { return mr_.rkey; }
 
     struct ibv_mr* mr() { return mr_; }
 
 private:
-    char* buf_;
-
     struct ibv_mr* mr_;
 };
 

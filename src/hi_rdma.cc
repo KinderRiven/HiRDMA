@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 11:53:37
+ * @LastEditTime: 2021-08-17 12:00:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -99,7 +99,7 @@ HiRDMABuffer* HiRDMA::RegisterRDMABuffer(size_t size, int access_mode)
     if (_mr == nullptr) {
         return nullptr;
     } else {
-        HiRDMABuffer* _rbuf = new HiRDMABuffer(_buf, _mr);
+        HiRDMABuffer* _rbuf = new HiRDMABuffer(_mr);
         return _rbuf;
     }
 }
