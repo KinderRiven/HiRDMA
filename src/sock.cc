@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-17 14:18:33
- * @LastEditTime: 2021-08-17 15:05:43
+ * @LastEditTime: 2021-08-17 15:43:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/sock.cc
@@ -11,7 +11,7 @@
 
 using namespace hi_rdma;
 
-static int Socket::Connect(const char* ip, const char* port)
+int Socket::Connect(const char* ip, const char* port)
 {
     struct addrinfo hints;
     struct addrinfo *result, *rp;
@@ -37,7 +37,7 @@ static int Socket::Connect(const char* ip, const char* port)
     return sock_fd;
 }
 
-static int Socket::Accept(const char* port)
+int Socket::Accept(const char* port)
 {
     struct addrinfo hints;
     struct addrinfo *result, *rp;
@@ -78,7 +78,7 @@ static int Socket::Accept(const char* port)
     return accept_sockfd;
 }
 
-static uint32_t Socket::Read(int sock_fd, char* buf, size_t len)
+uint32_t Socket::Read(int sock_fd, char* buf, size_t len)
 {
     size_t nr, tot_read;
     tot_read = 0;
@@ -97,7 +97,7 @@ static uint32_t Socket::Read(int sock_fd, char* buf, size_t len)
     return tot_read;
 }
 
-static uint32_t Socket::Write(int sock_fd, char* buf, size_t len)
+uint32_t Socket::Write(int sock_fd, char* buf, size_t len)
 {
     size_t nw, tot_written;
     for (tot_written = 0; tot_written < len;) {
