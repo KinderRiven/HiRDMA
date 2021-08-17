@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-17 13:08:38
+ * @LastEditTime: 2021-08-17 13:15:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -22,8 +22,14 @@ int main(int argc, char** argv)
         printf("%s\n", _status.ToString().c_str());
     }
 
-    hi_rdma::HiRDMABuffer* _rbuf = _hi_rdma->RegisterRDMABuffer(1024UL * 1024,
-        IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_READ | IBV_ACCESS_REMOTE_WRITE);
-    printf("[lkey:%d][rkey:%d]\n", _rbuf->lkey(), _rbuf->rkey());
+    hi_rdma::HiRDMABuffer* _rbuf = _hi_rdma->RegisterRDMABuffer(1048576UL,
+        hi_rdma::LOCAL_WR | hi_rdma::REMOTE_RD | hi_rdma::REMOTE_WR);
+    if (_rbuf != nullptr) {
+        printf("RegisterRDMABuffer Success!s\n");
+        printf("[addr:%llx][length:%d]\n", (uint64_t)_rbuf->buf(), _rbuf->length());
+        printf("[lkey:%d][rkey:%d]\n", _rbuf->lkey(), _rbuf->rkey());
+    } else {
+        printf("RegisterRDMABuffer Failed!\n");
+    }
     return 0;
 }
