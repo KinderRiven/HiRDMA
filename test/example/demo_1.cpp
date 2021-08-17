@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-17 11:57:17
+ * @LastEditTime: 2021-08-17 12:01:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -24,5 +24,6 @@ int main(int argc, char** argv)
 
     hi_rdma::HiRDMABuffer* _rbuf = _hi_rdma->RegisterRDMABuffer(1024UL * 1024,
         IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_READ | IBV_ACCESS_REMOTE_WRITE);
+    printf("[lkey:%d][rkey:%d]\n", _rbuf->lkey(), _rbuf->rkey());
     return 0;
 }
