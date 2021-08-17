@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-17 15:35:03
+ * @LastEditTime: 2021-08-17 15:43:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -26,6 +26,8 @@ enum access_mode_t {
 
 struct HiRDMAQPInfo {
 public:
+    HiRDMAQPInfo() { }
+
     HiRDMAQPInfo(int port_num, int idx, int qp_num, int lid, struct ibv_qp* qp, union ibv_gid* gid)
         : port_num_(port_num)
         , qp_num_(qp_num)
