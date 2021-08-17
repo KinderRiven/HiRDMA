@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 11:52:04
+ * @LastEditTime: 2021-08-17 11:53:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -96,8 +96,12 @@ HiRDMABuffer* HiRDMA::RegisterRDMABuffer(size_t size, int access_mode)
 {
     char* _buf = new char[size];
     struct ibv_mr* _mr = ibv_reg_mr(dev_pd_, _buf, size, access_mode);
-    HiRDMABuffer* _rbuf = new HiRDMABuffer(_buf, _mr);
-    return _rbuf;
+    if (_mr == nullptr) {
+        return nullptr;
+    } else {
+        HiRDMABuffer* _rbuf = new HiRDMABuffer(_buf, _mr);
+        return _rbuf;
+    }
 }
 
 Status HiRDMA::ExchangeQPInfo()
