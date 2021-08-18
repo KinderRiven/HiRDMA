@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-18 17:23:24
+ * @LastEditTime: 2021-08-18 17:33:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
     int _tmp;
     scanf("%d", &_tmp);
 
-    int _num_msg = 1;
+    int _num_msg = 5;
     size_t _size = 32;
     uint64_t _offset = 1024;
     for (int j = 0; j < _num_msg; j++) {
