@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-17 16:30:00
+ * @LastEditTime: 2021-08-18 13:27:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -106,9 +106,9 @@ public: // initlizate
 public: // verb
     HiRDMA() = delete;
 
-    Status Write(HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size);
+    Status Write(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size);
 
-    Status Read(HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size);
+    Status Read(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size);
 
 private:
     // only support private initlizate
