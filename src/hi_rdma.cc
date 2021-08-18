@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-18 17:32:51
+ * @LastEditTime: 2021-08-18 17:37:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -108,7 +108,7 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     }
 
     /* create cq */
-    _dev_cq = ibv_create_cq(_dev_ctx, 1, nullptr, nullptr, 0);
+    _dev_cq = ibv_create_cq(_dev_ctx, 4096, nullptr, nullptr, 0);
     if (_dev_cq == nullptr) {
         return Status::IOError("create cq failed.");
     }
@@ -200,7 +200,6 @@ Status HiRDMA::PollQP(int num)
             printf("  [byte_len:%d][qp_num:%d][src_qp:%d]\n", wc.byte_len, wc.qp_num, wc.src_qp);
             return Status::IOError("PollQP Failed.");
         } else if ((n) && (wc.status == IBV_WC_SUCCESS)) {
-            printf("%d\n", n);
             num -= n;
         }
         if (num <= 0) {
