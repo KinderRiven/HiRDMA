@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-18 14:04:37
+ * @LastEditTime: 2021-08-18 14:08:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -24,15 +24,12 @@ int main(int argc, char** argv)
     } else {
         printf(">> CreateRDMAContext Failed! [%s]\n", _status.ToString().c_str());
     }
-    for (auto i = 0; i < 3; i++) {
-        _local_buf = _hi_rdma->RegisterRDMABuffer(1048576UL,
-            hi_rdma::LOCAL_WR | hi_rdma::REMOTE_RD | hi_rdma::REMOTE_WR);
-        if (_local_buf != nullptr) {
-            printf(">> RegisterRDMABuffer Success!\n");
-            _local_buf->Print();
-        } else {
-            printf(">> RegisterRDMABuffer Failed!\n");
-        }
+    _local_buf = _hi_rdma->RegisterRDMABuffer(1048576UL, hi_rdma::LOCAL_WR | hi_rdma::REMOTE_RD | hi_rdma::REMOTE_WR);
+    if (_local_buf != nullptr) {
+        printf(">> RegisterRDMABuffer Success!\n");
+        _local_buf->Print();
+    } else {
+        printf(">> RegisterRDMABuffer Failed!\n");
     }
 
     int sock_fd = hi_rdma::Socket::Connect(server_ip, server_port);
