@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-17 16:27:18
+ * @LastEditTime: 2021-08-18 12:45:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -47,7 +47,7 @@ int HiRDMA::modify_qp_to_rtr(struct ibv_qp* qp, uint32_t remote_port, uint32_t r
     attr.ah_attr.grh.sgid_index = remote_idx; // index
     attr.ah_attr.grh.traffic_class = 0;
     flags = IBV_QP_STATE | IBV_QP_AV | IBV_QP_PATH_MTU | IBV_QP_DEST_QPN | IBV_QP_RQ_PSN | IBV_QP_MAX_DEST_RD_ATOMIC | IBV_QP_MIN_RNR_TIMER;
-    return ibv_modify_qp(qp_info->qp_, &attr, flags);
+    return ibv_modify_qp(qp, &attr, flags);
 }
 
 int HiRDMA::modify_qp_to_rts(struct ibv_qp* qp)
