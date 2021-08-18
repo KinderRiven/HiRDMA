@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-18 16:53:15
+ * @LastEditTime: 2021-08-18 16:56:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -202,7 +202,7 @@ Status HiRDMA::PollQP(int num)
         } else if ((n) && (wc.status == IBV_WC_SUCCESS)) {
             num -= n;
         }
-        if (num < 0) {
+        if (num <= 0) {
             break;
         }
     }
