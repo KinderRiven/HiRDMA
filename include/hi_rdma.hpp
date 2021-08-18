@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-18 13:27:27
+ * @LastEditTime: 2021-08-18 14:02:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -65,27 +65,39 @@ public:
     HiRDMABuffer(struct ibv_mr* mr)
         : mr_(mr)
     {
+        addr_ = (char*)mr_->addr;
+        length_ = mr_->length;
+        lkey_ = mr_->lkey;
+        rkey_ = mr_->rkey;
     }
 
     void Print()
     {
         printf(">>[HiRDMABuffer]\n");
-        printf("  [addr:0x%llx][length:%.2fMB]\n", (uint64_t)mr_->addr, 1.0 * mr_->length / (1024 * 1024));
-        printf("  [lkey:%d][rkey:%d]\n", mr_->lkey, mr_->rkey);
+        printf("  [addr:0x%llx][length:%.2fMB]\n", (uint64_t)addr_, 1.0 * length_ / (1024 * 1024));
+        printf("  [lkey:%d][rkey:%d]\n", lkey_, rkey_);
     }
 
-    char* buf() { return (char*)mr_->addr; }
+    char* buf() { return (char*)addr_; }
 
-    int length() { return mr_->length; }
+    int length() { return length_; }
 
-    int lkey() { return mr_->lkey; }
+    int lkey() { return lkey_; }
 
-    int rkey() { return mr_->rkey; }
+    int rkey() { return rkey_; }
 
     struct ibv_mr* mr() { return mr_; }
 
 private:
     struct ibv_mr* mr_;
+
+    char* addr_;
+
+    int length_;
+
+    int lkey_;
+
+    int rkey_;
 };
 
 // only one qp support

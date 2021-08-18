@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-18 13:44:14
+ * @LastEditTime: 2021-08-18 13:53:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 {
     hi_rdma::Options _options;
     hi_rdma::HiRDMA* _hi_rdma = nullptr;
-    hi_rdma::HiRDMABuffer* _remote_buf = nullptr;
+    hi_rdma::HiRDMABuffer _remote_buf = nullptr;
     hi_rdma::HiRDMABuffer* _local_buf = nullptr;
 
     hi_rdma::Status _status = hi_rdma::HiRDMA::CreateRDMAContext(_options, &_hi_rdma);
@@ -55,6 +55,5 @@ int main(int argc, char** argv)
         hi_rdma::Socket::Read(sock_fd, (char*)_remote_buf, sizeof(hi_rdma::HiRDMABuffer));
         _remote_buf->Print();
     }
-
     return 0;
 }
