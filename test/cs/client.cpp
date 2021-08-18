@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-18 17:33:11
+ * @LastEditTime: 2021-08-18 17:38:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
     } else {
         printf("[INFO] Write Failed!\n");
     }
-    _status = _hi_rdma->PollQP(_num_msg);
+    _status = _hi_rdma->PollQP(1);
     if (_status.ok()) {
         printf("[INFO] PollQP Success!\n");
         char* __data = _local_buf->buf();
