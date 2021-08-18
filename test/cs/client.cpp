@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-18 14:14:50
+ * @LastEditTime: 2021-08-18 14:21:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
 
     char _data[16] = "HelloWorld";
     _status = _hi_rdma->Write(_local_buf, &_remote_buf, 1024, _data, 16);
-    if (_status.OK()) {
+    if (_status.ok()) {
         printf(">> Write Success!\n");
     }
     return 0;
