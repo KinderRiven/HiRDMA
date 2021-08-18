@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-18 15:47:22
+ * @LastEditTime: 2021-08-18 15:51:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -187,7 +187,7 @@ Status HiRDMA::ConnectQP(HiRDMAQPInfo* local_qp, HiRDMAQPInfo* remote_qp)
 
 Status HiRDMA::PollQP()
 {
-    struct ibv_cq* cq = context->cq;
+    struct ibv_cq* cq = dev_cq_;
     struct ibv_wc wc;
     while (true) {
         int n = ibv_poll_cq(cq, 1, &wc);
