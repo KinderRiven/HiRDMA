@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-18 16:09:27
+ * @LastEditTime: 2021-08-18 16:55:02
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
     } else {
         printf("[INFO] Write Failed!\n");
     }
-    _status = _hi_rdma->PollQP();
+    _status = _hi_rdma->PollQP(1);
     if (_status.ok()) {
         printf("[INFO] PollQP Success!\n");
     } else {
@@ -75,7 +75,7 @@ int main(int argc, char** argv)
     } else {
         printf("[INFO] Write Failed!\n");
     }
-    _status = _hi_rdma->PollQP();
+    _status = _hi_rdma->PollQP(1);
     if (_status.ok()) {
         printf("[INFO] PollQP Success!\n");
         char* __data = _local_buf->buf();

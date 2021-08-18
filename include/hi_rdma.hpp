@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-18 16:04:41
+ * @LastEditTime: 2021-08-18 16:51:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -116,7 +116,7 @@ public: // initlizate
 
     Status ConnectQP(HiRDMAQPInfo* local_qp, HiRDMAQPInfo* remote_qp);
 
-    Status PollQP();
+    Status PollQP(int num);
 
     void PrintInfo();
 

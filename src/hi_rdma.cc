@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-18 16:37:00
+ * @LastEditTime: 2021-08-18 16:53:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -185,7 +185,7 @@ Status HiRDMA::ConnectQP(HiRDMAQPInfo* local_qp, HiRDMAQPInfo* remote_qp)
     return Status::OK();
 }
 
-Status HiRDMA::PollQP()
+Status HiRDMA::PollQP(int num)
 {
     struct ibv_cq* cq = dev_cq_;
     struct ibv_wc wc;
@@ -200,9 +200,13 @@ Status HiRDMA::PollQP()
             printf("  [byte_len:%d][qp_num:%d][src_qp:%d]\n", wc.byte_len, wc.qp_num, wc.src_qp);
             return Status::IOError("PollQP Failed.");
         } else if ((n) && (wc.status == IBV_WC_SUCCESS)) {
-            return Status::OK();
+            num -= n;
+        }
+        if (num < 0) {
+            break;
         }
     }
+    return Status::OK();
 }
 
 void HiRDMA::PrintInfo()
