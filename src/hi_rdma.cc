@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-18 16:35:56
+ * @LastEditTime: 2021-08-18 16:37:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -120,8 +120,8 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     _qp_init_attr.sq_sig_all = 1;
     _qp_init_attr.send_cq = _dev_cq;
     _qp_init_attr.recv_cq = _dev_cq;
-    _qp_init_attr.cap.max_send_wr = _dev_attr.max_qp_wr / 2; // [???]
-    _qp_init_attr.cap.max_recv_wr = _dev_attr.max_qp_wr / 2; // [???]
+    _qp_init_attr.cap.max_send_wr = 4096; // _dev_attr.max_qp_wr / 2; // [???]
+    _qp_init_attr.cap.max_recv_wr = 4096; // _dev_attr.max_qp_wr / 2; // [???]
     _qp_init_attr.cap.max_send_sge = 1;
     _qp_init_attr.cap.max_recv_sge = 1;
     _dev_qp = ibv_create_qp(_dev_pd, &_qp_init_attr);
