@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-18 14:08:15
+ * @LastEditTime: 2021-08-18 14:14:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -51,6 +51,12 @@ int main(int argc, char** argv)
         // buffer read
         hi_rdma::Socket::Read(sock_fd, (char*)&_remote_buf, sizeof(hi_rdma::HiRDMABuffer));
         _remote_buf.Print();
+    }
+
+    char _data[16] = "HelloWorld";
+    _status = _hi_rdma->Write(_local_buf, &_remote_buf, 1024, _data, 16);
+    if (_status.OK()) {
+        printf(">> Write Success!\n");
     }
     return 0;
 }
