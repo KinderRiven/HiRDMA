@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-18 12:45:59
+ * @LastEditTime: 2021-08-18 12:49:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -174,12 +174,10 @@ Status HiRDMA::ConnectQP(HiRDMAQPInfo* local_qp, HiRDMAQPInfo* remote_qp)
     if (_res) {
         return Status::IOError("modify qp to init failed.");
     }
-
     _res = modify_qp_to_rtr(local_qp->qp_, remote_qp->port_num_, remote_qp->idx_, remote_qp->qp_num_, remote_qp->lid_, remote_qp->gid_);
     if (_res) {
         return Status::IOError("modify qp to rtr failed.");
     }
-
     _res = modify_qp_to_rts(local_qp->qp_);
     if (_res) {
         return Status::IOError("modify qp to rts failed.");
