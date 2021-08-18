@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-18 14:20:36
+ * @LastEditTime: 2021-08-18 14:23:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -19,10 +19,8 @@ int main(int argc, char** argv)
     hi_rdma::Status _status = hi_rdma::HiRDMA::CreateRDMAContext(_options, &_hi_rdma);
     if (_status.ok()) {
         printf(">> CreateRDMAContext Success!\n");
-        printf("%s\n", _status.ToString().c_str());
     } else {
-        printf(">> CreateRDMAContext Failed!\n");
-        printf("   [status:%s]\n", _status.ToString().c_str());
+        printf(">> CreateRDMAContext Failed! [%s]\n", _status.ToString().c_str());
     }
     _rbuf = _hi_rdma->RegisterRDMABuffer(1048576UL, hi_rdma::LOCAL_WR | hi_rdma::REMOTE_RD | hi_rdma::REMOTE_WR);
     if (_rbuf != nullptr) {
@@ -51,7 +49,7 @@ int main(int argc, char** argv)
     }
 
     int _tmp;
-    char *_data =_rbuf->buf() + 1024;
+    char* _data = _rbuf->buf() + 1024;
     scanf("%d", &_tmp);
     for (int i = 0; i < 16; i++) {
         printf("%c", _data[i]);
