@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-18 14:23:09
+ * @LastEditTime: 2021-08-18 16:09:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -26,6 +26,8 @@ int main(int argc, char** argv)
     if (_rbuf != nullptr) {
         printf(">> RegisterRDMABuffer Success!\n");
         _rbuf->Print();
+        char* __data = _rbuf->buf(); // prepare data for client
+        strcpy(__data, "Hi, This is Server!");
     } else {
         printf(">> RegisterRDMABuffer Failed!\n");
     }
@@ -48,10 +50,11 @@ int main(int argc, char** argv)
         hi_rdma::Socket::Write(sock_fd, (char*)_rbuf, sizeof(hi_rdma::HiRDMABuffer));
     }
 
+    // ----------------------------------
     int _tmp;
     char* _data = _rbuf->buf() + 1024;
     scanf("%d", &_tmp);
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < 32; i++) {
         printf("%c", _data[i]);
     }
     printf("\n");

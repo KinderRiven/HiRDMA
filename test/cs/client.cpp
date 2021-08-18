@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-18 15:50:57
+ * @LastEditTime: 2021-08-18 16:09:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -53,8 +53,9 @@ int main(int argc, char** argv)
         _remote_buf.Print();
     }
 
-    char _data[16] = "HelloWorld";
-    _status = _hi_rdma->Write(_local_buf, &_remote_buf, 1024, _data, 16);
+    // ------------ TEST WRITE ------------
+    char _data[32] = "Hello, I'm Client.";
+    _status = _hi_rdma->Write(_local_buf, &_remote_buf, 1024, _data, 32);
     if (_status.ok()) {
         printf("[INFO] Write Success!\n");
     } else {
@@ -63,6 +64,25 @@ int main(int argc, char** argv)
     _status = _hi_rdma->PollQP();
     if (_status.ok()) {
         printf("[INFO] PollQP Success!\n");
+    } else {
+        printf("[INFO] PollQP Failed!\n");
+    }
+
+    // ------------ TEST READ ------------
+    _status = _hi_rdma->Read(_local_buf, &_remote_buf, 0, 32);
+    if (_status.ok()) {
+        printf("[INFO] Write Success!\n");
+    } else {
+        printf("[INFO] Write Failed!\n");
+    }
+    _status = _hi_rdma->PollQP();
+    if (_status.ok()) {
+        printf("[INFO] PollQP Success!\n");
+        char* __data = _local_buf->buf();
+        for (int i = 0; i < 32; i++) {
+            printf("%c", __data[i]);
+        }
+        printf("\n");
     } else {
         printf("[INFO] PollQP Failed!\n");
     }
