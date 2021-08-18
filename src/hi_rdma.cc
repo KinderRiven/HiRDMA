@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-18 13:48:14
+ * @LastEditTime: 2021-08-18 14:28:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -214,9 +214,9 @@ Status HiRDMA::Write(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, ch
     // local buffer
     memset(&sge, 0, sizeof(sge));
     memcpy((void*)lbuf->buf(), buf, size);
-    sge.addr = (uintptr_t)lbuf->buf();
-    sge.length = size;
-    sge.lkey = lbuf->length();
+    sge.addr = (uintptr_t)lbuf->buf(); // addr
+    sge.length = size; // size
+    sge.lkey = lbuf->lkey(); // lkey
 
     // prepare the send work request
     memset(&sr, 0, sizeof(sr));
