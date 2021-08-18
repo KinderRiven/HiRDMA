@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-18 14:02:03
+ * @LastEditTime: 2021-08-18 14:05:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -62,6 +62,11 @@ private:
 
 class HiRDMABuffer {
 public:
+    HiRDMABuffer()
+        : mr_(nullptr)
+    {
+    }
+
     HiRDMABuffer(struct ibv_mr* mr)
         : mr_(mr)
     {
