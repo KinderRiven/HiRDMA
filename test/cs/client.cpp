@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-18 16:55:02
+ * @LastEditTime: 2021-08-18 17:14:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -55,13 +55,20 @@ int main(int argc, char** argv)
 
     // ------------ TEST WRITE ------------
     char _data[32] = "Hello, I'm Client.";
-    _status = _hi_rdma->Write(_local_buf, &_remote_buf, 1024, _data, 32);
-    if (_status.ok()) {
-        printf("[INFO] Write Success!\n");
-    } else {
-        printf("[INFO] Write Failed!\n");
+    int _num_msg = 1;
+    size_t _size = 32;
+    uint64_t _offset = 1024;
+    for (int i = 0; i < _num_msg; i++) {
+        _status = _hi_rdma->Write(_local_buf, &_remote_buf, _offset, _data, _size);
+        _offset += _size;
+        if (_status.ok()) {
+            printf("[INFO] Write Success!\n");
+        } else {
+            printf("[INFO] Write Failed!\n");
+        }
     }
-    _status = _hi_rdma->PollQP(1);
+
+    _status = _hi_rdma->PollQP(_num_msg);
     if (_status.ok()) {
         printf("[INFO] PollQP Success!\n");
     } else {
@@ -69,17 +76,17 @@ int main(int argc, char** argv)
     }
 
     // ------------ TEST READ ------------
-    _status = _hi_rdma->Read(_local_buf, &_remote_buf, 0, 32);
+    _status = _hi_rdma->Read(_local_buf, &_remote_buf, 0, _size);
     if (_status.ok()) {
         printf("[INFO] Write Success!\n");
     } else {
         printf("[INFO] Write Failed!\n");
     }
-    _status = _hi_rdma->PollQP(1);
+    _status = _hi_rdma->PollQP(_num_msg);
     if (_status.ok()) {
         printf("[INFO] PollQP Success!\n");
         char* __data = _local_buf->buf();
-        for (int i = 0; i < 32; i++) {
+        for (int i = 0; i < _size; i++) {
             printf("%c", __data[i]);
         }
         printf("\n");
