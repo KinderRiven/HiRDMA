@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-19 10:16:56
+ * @LastEditTime: 2021-08-19 10:25:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -275,8 +275,6 @@ Status HiRDMA::Send(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, cha
     sr.num_sge = 1;
     sr.opcode = IBV_WR_SEND;
     sr.send_flags = IBV_SEND_SIGNALED;
-    sr.wr.rdma.remote_addr = (uint64_t)(rbuf->buf() + offset); // remote buffer
-    sr.wr.rdma.rkey = rbuf->rkey(); // remote key
 
     // there is a receive request in the responder side, so we won't get any into RNR flow
     int ret = ibv_post_send(dev_qp_, &sr, &bad_wr);
