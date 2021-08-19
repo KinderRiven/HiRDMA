@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-19 15:49:51
+ * @LastEditTime: 2021-08-19 16:30:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -22,6 +22,7 @@ enum access_mode_t {
     LOCAL_WR = IBV_ACCESS_LOCAL_WRITE,
     REMOTE_WR = IBV_ACCESS_REMOTE_WRITE,
     REMOTE_RD = IBV_ACCESS_REMOTE_READ,
+    REMOTE_ATOMIC = IBV_ACCESS_REMOTE_ATOMIC,
 };
 
 struct HiRDMAQPInfo {

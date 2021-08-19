@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-19 16:22:33
+ * @LastEditTime: 2021-08-19 16:31:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -24,7 +24,7 @@ int main(int argc, char** argv)
     } else {
         printf("[INFO] CreateRDMAContext Failed! [%s]\n", _status.ToString().c_str());
     }
-    _local_buf = _hi_rdma->RegisterRDMABuffer(1048576UL, hi_rdma::LOCAL_WR | hi_rdma::REMOTE_RD | hi_rdma::REMOTE_WR);
+    _local_buf = _hi_rdma->RegisterRDMABuffer(1048576UL, hi_rdma::LOCAL_WR | hi_rdma::REMOTE_RD | hi_rdma::REMOTE_WR | hi_rdma::REMOTE_ATOMIC);
     if (_local_buf != nullptr) {
         printf("[INFO] RegisterRDMABuffer Success!\n");
         _local_buf->Print();
