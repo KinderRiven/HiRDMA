@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-19 10:26:44
+ * @LastEditTime: 2021-08-19 10:55:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -100,7 +100,7 @@ int main(int argc, char** argv)
     _size = 32;
     _offset = 1024;
     for (int i = 0; i < _num_msg; i++) {
-        _status = _hi_rdma->Send(_local_buf, &_remote_buf, _offset, _data2, _size);
+        _status = _hi_rdma->Send(_local_buf, _offset, _data2, _size);
         _offset += _size;
         if (_status.ok()) {
             printf("[INFO] Send Success!\n");
