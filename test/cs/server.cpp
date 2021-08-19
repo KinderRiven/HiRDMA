@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-19 12:14:20
+ * @LastEditTime: 2021-08-19 12:22:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -74,6 +74,12 @@ int main(int argc, char** argv)
         printf("[INFO] Receive Success!\n");
     } else {
         printf("[INFO] Receive Failed!\n");
+    }
+    _status = _hi_rdma->PollQP(1);
+    if (_status.ok()) {
+        printf("[INFO] PollQP Receive Success!\n");
+    } else {
+        printf("[INFO] PollQP Receive Failed!\n");
     }
     scanf("%d", &_tmp);
     char* _data = _rbuf->buf();
