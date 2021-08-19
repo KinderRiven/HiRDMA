@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-18 17:37:33
+ * @LastEditTime: 2021-08-19 10:16:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -254,6 +254,35 @@ Status HiRDMA::Write(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, ch
     return (ret == 0) ? Status::OK() : Status::IOError("write failed.");
 }
 
+Status HiRDMA::Send(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size)
+{
+    struct ibv_sge sge;
+    struct ibv_send_wr sr;
+    struct ibv_send_wr* bad_wr = nullptr;
+
+    // local buffer
+    memset(&sge, 0, sizeof(sge));
+    memcpy((void*)lbuf->buf(), buf, size);
+    sge.addr = (uintptr_t)lbuf->buf(); // addr
+    sge.length = size; // size
+    sge.lkey = lbuf->lkey(); // lkey
+
+    // prepare the send work request
+    memset(&sr, 0, sizeof(sr));
+    sr.next = nullptr;
+    sr.wr_id = 0;
+    sr.sg_list = &sge;
+    sr.num_sge = 1;
+    sr.opcode = IBV_WR_SEND;
+    sr.send_flags = IBV_SEND_SIGNALED;
+    sr.wr.rdma.remote_addr = (uint64_t)(rbuf->buf() + offset); // remote buffer
+    sr.wr.rdma.rkey = rbuf->rkey(); // remote key
+
+    // there is a receive request in the responder side, so we won't get any into RNR flow
+    int ret = ibv_post_send(dev_qp_, &sr, &bad_wr);
+    return (ret == 0) ? Status::OK() : Status::IOError("send failed.");
+}
+
 Status HiRDMA::Read(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, size_t size)
 {
     struct ibv_sge sge;
@@ -279,5 +308,33 @@ Status HiRDMA::Read(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, siz
 
     // there is a receive request in the responder side, so we won't get any into RNR flow
     int ret = ibv_post_send(dev_qp_, &sr, &bad_wr);
-    return (ret == 0) ? Status::OK() : Status::IOError("write failed.");
+    return (ret == 0) ? Status::OK() : Status::IOError("read failed.");
+}
+
+Status HiRDMA::Receive(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, size_t size)
+{
+    struct ibv_sge sge;
+    struct ibv_send_wr sr;
+    struct ibv_send_wr* bad_wr = nullptr;
+
+    // local buffer
+    memset(&sge, 0, sizeof(sge));
+    sge.addr = (uintptr_t)lbuf->buf(); // addr
+    sge.length = size; // size
+    sge.lkey = lbuf->lkey(); // lkey
+
+    // prepare the send work request
+    memset(&sr, 0, sizeof(sr));
+    sr.next = nullptr;
+    sr.wr_id = 0;
+    sr.sg_list = &sge;
+    sr.num_sge = 1;
+    sr.opcode = IBV_WR_RDMA_READ;
+    sr.send_flags = IBV_SEND_SIGNALED;
+    sr.wr.rdma.remote_addr = (uint64_t)(rbuf->buf() + offset); // remote buffer
+    sr.wr.rdma.rkey = rbuf->rkey(); // remote key
+
+    // there is a receive request in the responder side, so we won't get any into RNR flow
+    int ret = ibv_post_send(dev_qp_, &sr, &bad_wr);
+    return (ret == 0) ? Status::OK() : Status::IOError("read failed.");
 }
