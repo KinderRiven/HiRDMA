@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-18 17:33:06
+ * @LastEditTime: 2021-08-19 10:47:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
     // ----------------------------------
     int _tmp;
     scanf("%d", &_tmp);
-
+    // ----------------------------------
     int _num_msg = 5;
     size_t _size = 32;
     uint64_t _offset = 1024;
@@ -65,5 +65,15 @@ int main(int argc, char** argv)
         }
         printf("\n");
     }
+
+    // --------- TEST RECEIVE -------------
+    _status = _hi_rdma->Receive(_rbuf, 0, _size);
+    if (_status.ok()) {
+        printf("[INFO] Receive Success!\n");
+    } else {
+        printf("[INFO] Receive Failed!\n");
+    }
+    // ----------------------------------
+    scanf("%d", &_tmp);
     return 0;
 }

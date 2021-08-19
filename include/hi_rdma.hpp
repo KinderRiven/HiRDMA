@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-19 10:05:10
+ * @LastEditTime: 2021-08-19 10:41:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -125,11 +125,11 @@ public: // verb
 
     Status Write(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size); // rdma write verb
 
-    Status Send(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size); // rdma send verb
-
     Status Read(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, size_t size); // rdma read verb
 
-    Status Receive(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, size_t size); // rdma receive verb
+    Status Send(HiRDMABuffer* lbuf, uint64_t offset, char* buf, size_t size); // rdma send verb
+
+    Status Receive(HiRDMABuffer* lbuf, uint64_t offset, size_t size); // rdma receive verb
 
 private:
     // only support private initlizate
