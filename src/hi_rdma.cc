@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-19 16:18:52
+ * @LastEditTime: 2021-08-19 16:26:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -353,7 +353,7 @@ Status HiRDMA::AtomicFetchAdd(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t o
     wr.num_sge = 1;
     wr.opcode = IBV_WR_ATOMIC_FETCH_AND_ADD;
     wr.send_flags = IBV_SEND_SIGNALED;
-    wr.wr.atomic.remote_addr = remote_address;
+    wr.wr.atomic.remote_addr = (uint64_t)(rbuf->buf() + offset); // remote buffer
     wr.wr.atomic.rkey = rbuf->rkey();
     wr.wr.atomic.compare_add = 1ULL;
 
