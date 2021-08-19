@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-19 10:17:11
+ * @LastEditTime: 2021-08-19 10:26:44
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -96,7 +96,7 @@ int main(int argc, char** argv)
 
     // ------------ TEST SEND ------------
     char _data2[32] = "Hello, I'm Client.";
-    _num_msg = 5;
+    _num_msg = 1;
     _size = 32;
     _offset = 1024;
     for (int i = 0; i < _num_msg; i++) {
