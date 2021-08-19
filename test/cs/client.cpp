@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-19 11:17:34
+ * @LastEditTime: 2021-08-19 12:14:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -59,7 +59,7 @@ int main(int argc, char** argv)
     size_t _size = 32;
     uint64_t _offset = 1024;
 
-#if 1
+#if 0
     // ------------ TEST WRITE ------------
     // write to remote [offset]
     for (int i = 0; i < _num_msg; i++) {
