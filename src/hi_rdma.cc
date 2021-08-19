@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-19 10:41:09
+ * @LastEditTime: 2021-08-19 10:51:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -312,8 +312,8 @@ Status HiRDMA::Send(HiRDMABuffer* lbuf, uint64_t offset, char* buf, size_t size)
 Status HiRDMA::Receive(HiRDMABuffer* lbuf, uint64_t offset, size_t size)
 {
     struct ibv_sge sge;
-    struct ibv_send_wr sr;
-    struct ibv_send_wr* bad_wr = nullptr;
+    struct ibv_recv_wr wr;
+    struct ibv_recv_wr* bad_wr;
 
     // local buffer
     memset(&sge, 0, sizeof(sge));
