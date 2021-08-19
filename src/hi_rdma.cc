@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-19 16:41:30
+ * @LastEditTime: 2021-08-19 16:55:22
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -348,8 +348,7 @@ Status HiRDMA::AtomicFetchAdd(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t o
     struct ibv_send_wr wr;
     struct ibv_send_wr* bad_wr = nullptr;
 
-    // local buffer
-    memset(&sge, 0, sizeof(sge));
+    memset(&sge, 0, sizeof(sge)); // local buffer
     sge.addr = (uintptr_t)lbuf->buf(); // addr
     sge.length = 8; // uint64_t
     sge.lkey = lbuf->lkey(); // lkey

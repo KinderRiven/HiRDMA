@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-19 16:31:10
+ * @LastEditTime: 2021-08-19 16:44:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -130,7 +130,7 @@ int main(int argc, char** argv)
         _status = _hi_rdma->PollQP(1);
         if (_status.ok()) {
             uint64_t* __atomic_val = (uint64_t*)_local_buf->buf();
-            printf("[INFO] PollQP Send Success! [%d]\n", *__atomic_val);
+            printf("[INFO] PollQP Send Success! [%llu]\n", *__atomic_val);
         } else {
             printf("[INFO] PollQP Send Failed!\n");
         }
