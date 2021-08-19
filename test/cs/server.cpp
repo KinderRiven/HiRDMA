@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-19 10:55:54
+ * @LastEditTime: 2021-08-19 11:09:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -76,6 +76,14 @@ int main(int argc, char** argv)
         printf("[INFO] Receive Failed!\n");
     }
     scanf("%d", &_tmp);
+    for (int j = 0; j < _num_msg; j++) {
+        char* _data = _rbuf->buf() + _offset;
+        _offset += _size;
+        for (int i = 0; i < _size; i++) {
+            printf("%c", _data[i]);
+        }
+        printf("\n");
+    }
 #endif
     return 0;
 }
