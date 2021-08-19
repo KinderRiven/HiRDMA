@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-19 12:22:01
+ * @LastEditTime: 2021-08-19 16:25:02
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -51,8 +51,7 @@ int main(int argc, char** argv)
     }
 
     // ----------------------------------
-    int _tmp;
-    int _num_msg = 5;
+    int _tmp, _num_msg = 5;
     size_t _size = 32;
     uint64_t _offset = 1024;
     // ----------------------------------
@@ -68,7 +67,7 @@ int main(int argc, char** argv)
     }
 #endif
     // --------- TEST RECEIVE -------------
-#if 1
+#if 0
     _status = _hi_rdma->Receive(_rbuf, 0, _size);
     if (_status.ok()) {
         printf("[INFO] Receive Success!\n");
@@ -87,6 +86,14 @@ int main(int argc, char** argv)
         printf("%c", _data[i]);
     }
     printf("\n");
+#endif
+
+#if 1
+    uint64_t* __atomic_value = _rbuf->buf();
+    *__atomic_value = 0;
+    while (scanf("%d", &_tmp) != EOF) {
+        printf("[ATOMIC:%llu]\n", *__atomic_value);
+    }
 #endif
     return 0;
 }

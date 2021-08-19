@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-19 12:14:29
+ * @LastEditTime: 2021-08-19 16:22:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -80,7 +80,7 @@ int main(int argc, char** argv)
     }
 #endif
 
-#if 1
+#if 0
     // ------------ TEST READ ------------
     _status = _hi_rdma->Read(_local_buf, &_remote_buf, 0, _size);
     if (_status.ok()) {
@@ -101,7 +101,7 @@ int main(int argc, char** argv)
     }
 #endif
 
-#if 1
+#if 0
     // ------------ TEST SEND ------------
     char _data2[32] = "TEST SEND.";
     _size = 32;
@@ -116,6 +116,24 @@ int main(int argc, char** argv)
         printf("[INFO] PollQP Send Success!\n");
     } else {
         printf("[INFO] PollQP Send Failed!\n");
+    }
+#endif
+
+#if 1
+    for (int i = 0; i < 10; i++) {
+        _status = _hi_rdma->AtomicFetchAdd(_local_buf, &_remote_buf, 0);
+        if (_status.ok()) {
+            printf("[INFO] AtomicFecthAdd Success!\n");
+        } else {
+            printf("[INFO] AtomicFecthAdd Failed!\n");
+        }
+        _status = _hi_rdma->PollQP(1);
+        if (_status.ok()) {
+            uint64_t* __atomic_val = (uint64_t*)_local_buf->buf();
+            printf("[INFO] PollQP Send Success! [%d]\n", *__atomic_val);
+        } else {
+            printf("[INFO] PollQP Send Failed!\n");
+        }
     }
 #endif
     return 0;

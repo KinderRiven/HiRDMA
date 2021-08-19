@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-19 10:41:29
+ * @LastEditTime: 2021-08-19 15:49:51
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -130,6 +130,10 @@ public: // verb
     Status Send(HiRDMABuffer* lbuf, uint64_t offset, char* buf, size_t size); // rdma send verb
 
     Status Receive(HiRDMABuffer* lbuf, uint64_t offset, size_t size); // rdma receive verb
+
+    Status AtomicFetchAdd(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset); // rdma atomic fetch and add
+
+    Status AtomicCompareSwap(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset); // rdma compare and swap
 
 private:
     // only support private initlizate
