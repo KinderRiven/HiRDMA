@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-19 10:48:56
+ * @LastEditTime: 2021-08-19 10:55:54
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -52,12 +52,12 @@ int main(int argc, char** argv)
 
     // ----------------------------------
     int _tmp;
-    // ----------------------------------
-#if 0
-    scanf("%d", &_tmp);
     int _num_msg = 5;
     size_t _size = 32;
     uint64_t _offset = 1024;
+    // ----------------------------------
+#if 0
+    scanf("%d", &_tmp);
     for (int j = 0; j < _num_msg; j++) {
         char* _data = _rbuf->buf() + _offset;
         _offset += _size;
