@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-19 16:25:02
+ * @LastEditTime: 2021-08-19 16:27:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -89,7 +89,7 @@ int main(int argc, char** argv)
 #endif
 
 #if 1
-    uint64_t* __atomic_value = _rbuf->buf();
+    uint64_t* __atomic_value = (uint64_t*)_rbuf->buf();
     *__atomic_value = 0;
     while (scanf("%d", &_tmp) != EOF) {
         printf("[ATOMIC:%llu]\n", *__atomic_value);
