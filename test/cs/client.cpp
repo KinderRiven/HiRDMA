@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-19 10:55:25
+ * @LastEditTime: 2021-08-19 11:17:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -53,12 +53,17 @@ int main(int argc, char** argv)
         _remote_buf.Print();
     }
 
-    // ------------ TEST WRITE ------------
-    char _data1[32] = "Hello, I'm Client.";
+    // ------------------------------------
+    char _data1[32];
     int _num_msg = 5;
     size_t _size = 32;
     uint64_t _offset = 1024;
+
+#if 1
+    // ------------ TEST WRITE ------------
+    // write to remote [offset]
     for (int i = 0; i < _num_msg; i++) {
+        sprintf(_data1, "%s [%d]", "TEST WRITE.", i);
         _status = _hi_rdma->Write(_local_buf, &_remote_buf, _offset, _data1, _size);
         _offset += _size;
         if (_status.ok()) {
@@ -67,14 +72,15 @@ int main(int argc, char** argv)
             printf("[INFO] Write Failed!\n");
         }
     }
-
     _status = _hi_rdma->PollQP(_num_msg);
     if (_status.ok()) {
         printf("[INFO] PollQP Write Success!\n");
     } else {
         printf("[INFO] PollQP Write Failed!\n");
     }
+#endif
 
+#if 1
     // ------------ TEST READ ------------
     _status = _hi_rdma->Read(_local_buf, &_remote_buf, 0, _size);
     if (_status.ok()) {
@@ -93,27 +99,24 @@ int main(int argc, char** argv)
     } else {
         printf("[INFO] PollQP Read Failed!\n");
     }
+#endif
 
+#if 1
     // ------------ TEST SEND ------------
-    char _data2[32] = "Hello, I'm Client.";
-    _num_msg = 1;
+    char _data2[32] = "TEST SEND.";
     _size = 32;
-    _offset = 1024;
-    for (int i = 0; i < _num_msg; i++) {
-        _status = _hi_rdma->Send(_local_buf, _offset, _data2, _size);
-        _offset += _size;
-        if (_status.ok()) {
-            printf("[INFO] Send Success!\n");
-        } else {
-            printf("[INFO] Send Failed!\n");
-        }
+    _status = _hi_rdma->Send(_local_buf, 0, _data2, _size);
+    if (_status.ok()) {
+        printf("[INFO] Send Success!\n");
+    } else {
+        printf("[INFO] Send Failed!\n");
     }
-
-    _status = _hi_rdma->PollQP(_num_msg);
+    _status = _hi_rdma->PollQP(1);
     if (_status.ok()) {
         printf("[INFO] PollQP Send Success!\n");
     } else {
         printf("[INFO] PollQP Send Failed!\n");
     }
+#endif
     return 0;
 }
