@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-19 16:26:23
+ * @LastEditTime: 2021-08-19 16:41:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -19,7 +19,7 @@ int HiRDMA::modify_qp_to_init(struct ibv_qp* qp)
     attr.qp_state = IBV_QPS_INIT;
     attr.port_num = 1;
     attr.pkey_index = 0;
-    attr.qp_access_flags = IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_READ | IBV_ACCESS_REMOTE_WRITE;
+    attr.qp_access_flags = IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_READ | IBV_ACCESS_REMOTE_WRITE | IBV_ACCESS_REMOTE_ATOMIC;
     flags = IBV_QP_STATE | IBV_QP_PKEY_INDEX | IBV_QP_PORT | IBV_QP_ACCESS_FLAGS;
     return ibv_modify_qp(qp, &attr, flags);
 }
@@ -116,6 +116,15 @@ Status HiRDMA::CreateRDMAContext(Options& options, HiRDMA** context)
     /* create qp */
     struct ibv_qp_init_attr _qp_init_attr;
     memset(&_qp_init_attr, 0, sizeof(_qp_init_attr));
+    /*
+    IBV_QPT_RC = 2,
+    IBV_QPT_UC,
+    IBV_QPT_UD,
+    IBV_QPT_RAW_PACKET = 8,
+    IBV_QPT_XRC_SEND = 9,
+    IBV_QPT_XRC_RECV,
+    IBV_QPT_DRIVER = 0xff,
+    */
     _qp_init_attr.qp_type = IBV_QPT_RC;
     _qp_init_attr.sq_sig_all = 1;
     _qp_init_attr.send_cq = _dev_cq;
