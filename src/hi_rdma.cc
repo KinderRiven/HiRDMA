@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-19 16:55:22
+ * @LastEditTime: 2021-08-25 11:23:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -342,7 +342,7 @@ Status HiRDMA::Receive(HiRDMABuffer* lbuf, uint64_t offset, size_t size)
     return (ret == 0) ? Status::OK() : Status::IOError("read failed.");
 }
 
-Status HiRDMA::AtomicFetchAdd(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset)
+Status HiRDMA::AtomicFetchAdd(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t add, uint64_t offset)
 {
     struct ibv_sge sge;
     struct ibv_send_wr wr;
@@ -350,7 +350,7 @@ Status HiRDMA::AtomicFetchAdd(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t o
 
     memset(&sge, 0, sizeof(sge)); // local buffer
     sge.addr = (uintptr_t)lbuf->buf(); // addr
-    sge.length = 8; // uint64_t
+    sge.length = 64; // uint64_t
     sge.lkey = lbuf->lkey(); // lkey
 
     // prepare the send work request
@@ -363,14 +363,38 @@ Status HiRDMA::AtomicFetchAdd(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t o
     wr.send_flags = IBV_SEND_SIGNALED;
     wr.wr.atomic.remote_addr = (uint64_t)(rbuf->buf() + offset); // remote buffer
     wr.wr.atomic.rkey = rbuf->rkey();
-    wr.wr.atomic.compare_add = 1ULL;
+    wr.wr.atomic.compare_add = add;
 
     // there is a receive request in the responder side, so we won't get any into RNR flow
     int ret = ibv_post_send(dev_qp_, &wr, &bad_wr);
     return (ret == 0) ? Status::OK() : Status::IOError("atmic fetch add failed.");
 }
 
-Status HiRDMA::AtomicCompareSwap(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset)
+Status HiRDMA::AtomicCompareSwap(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t compare, uint64_t swap, uint64_t offset)
 {
-    return Status::OK();
+    struct ibv_sge sge;
+    struct ibv_send_wr wr;
+    struct ibv_send_wr* bad_wr = nullptr;
+
+    memset(&sge, 0, sizeof(sge)); // local buffer
+    sge.addr = (uintptr_t)lbuf->buf(); // addr
+    sge.length = 64; // uint64_t
+    sge.lkey = lbuf->lkey(); // lkey
+
+    // prepare the send work request
+    memset(&wr, 0, sizeof(wr));
+    wr.next = nullptr;
+    wr.wr_id = 0;
+    wr.sg_list = &sge;
+    wr.num_sge = 1;
+    wr.opcode = IBV_WR_ATOMIC_CMP_AND_SWP;
+    wr.send_flags = IBV_SEND_SIGNALED;
+    wr.wr.atomic.remote_addr = (uint64_t)(rbuf->buf() + offset);
+    wr.wr.atomic.rkey = rbuf->rkey();
+    wr.wr.atomic.compare_add = compare;
+    wr.wr.atomic.swap = swap;
+
+    // there is a receive request in the responder side, so we won't get any into RNR flow
+    int ret = ibv_post_send(dev_qp_, &wr, &bad_wr);
+    return (ret == 0) ? Status::OK() : Status::IOError("compare and swap failed.");
 }

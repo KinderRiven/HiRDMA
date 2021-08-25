@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 16:43:34
- * @LastEditTime: 2021-08-19 16:44:09
+ * @LastEditTime: 2021-08-25 11:24:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/test/example/demo_1.cpp
@@ -121,7 +121,7 @@ int main(int argc, char** argv)
 
 #if 1
     for (int i = 0; i < 10; i++) {
-        _status = _hi_rdma->AtomicFetchAdd(_local_buf, &_remote_buf, 0);
+        _status = _hi_rdma->AtomicFetchAdd(_local_buf, &_remote_buf, i, 0);
         if (_status.ok()) {
             printf("[INFO] AtomicFecthAdd Success!\n");
         } else {
