@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-25 11:20:52
+ * @LastEditTime: 2021-08-25 19:34:17
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -25,40 +25,44 @@ enum access_mode_t {
     REMOTE_ATOMIC = IBV_ACCESS_REMOTE_ATOMIC,
 };
 
-struct HiRDMAQPInfo {
+struct HiRDMAQP {
 public:
-    HiRDMAQPInfo() { }
+    HiRDMAQP() { }
 
-    HiRDMAQPInfo(int port_num, int idx, int qp_num, int lid, struct ibv_qp* qp, union ibv_gid* gid)
-        : port_num_(port_num)
-        , qp_num_(qp_num)
-        , idx_(idx)
-        , lid_(lid)
-        , qp_(qp)
-    {
-        memcpy((void*)gid_, (void*)gid, 16);
-    }
+    HiRDMAQP(int port_num, int idx, int qp_num, int lid, struct ibv_cq* cq, struct ibv_qp* qp, union ibv_gid* gid);
 
-    void Print()
-    {
-        printf(">>[HiRDMAQP]\n");
-        printf("  [port:%d][idx:%d][lid:%d][qp_num:%d]\n", port_num_, idx_, lid_, qp_num_);
-    }
+    void Print();
+
+    Status PollQP(int num);
+
+    Status Write(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size);
+
+    Status Read(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, size_t size);
+
+    Status Send(HiRDMABuffer* lbuf, uint64_t offset, char* buf, size_t size);
+
+    Status Receive(HiRDMABuffer* lbuf, uint64_t offset, size_t size);
+
+    Status AtomicFetchAdd(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t add, uint64_t offset);
+
+    Status AtomicCompareSwap(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t compare, uint64_t swap, uint64_t offset);
 
     friend class HiRDMA;
 
 private:
     int lid_;
 
+    int idx_;
+
     int qp_num_;
 
     int port_num_;
 
-    int idx_;
+    uint8_t gid_[16];
+
+    struct ibv_cq* cq_;
 
     struct ibv_qp* qp_;
-
-    uint8_t gid_[16];
 };
 
 class HiRDMABuffer {
@@ -113,9 +117,9 @@ public: // initlizate
 
     HiRDMABuffer* RegisterRDMABuffer(size_t size, int access_mode);
 
-    HiRDMAQPInfo* AcquireQPInfo();
+    HiRDMAQP* RegisterQP();
 
-    Status ConnectQP(HiRDMAQPInfo* local_qp, HiRDMAQPInfo* remote_qp);
+    Status ConnectQP(HiRDMAQP* local_qp, HiRDMAQP* remote_qp);
 
     Status PollQP(int num);
 
@@ -138,37 +142,28 @@ public: // verb
 
 private:
     // only support private initlizate
-    HiRDMA(std::string& dev_name, int dev_port, int dev_index, struct ibv_device* dev, struct ibv_context* ctx, struct ibv_pd* pd, struct ibv_cq* cq, struct ibv_qp* qp);
-
-    // Transition a QP from the RESET to INIT state
-    int modify_qp_to_init(struct ibv_qp* qp);
-
-    // Transition a QP from the INIT to RTR state, using the specified QP number
-    int modify_qp_to_rtr(struct ibv_qp* qp, uint32_t remote_port, uint32_t remote_idx, uint32_t remote_qp_num, uint16_t remote_lid, uint8_t* remote_gid);
-
-    // Transition a QP from the RTR to RTS state
-    int modify_qp_to_rts(struct ibv_qp* qp);
+    HiRDMA(std::string& dev_name, int dev_port, int dev_index, struct ibv_device* dev, struct ibv_context* ctx, struct ibv_pd* pd);
 
 private:
     std::string dev_name_;
 
-    int dev_port_;
+    int lid_;
 
     int dev_idx_;
 
-    int lid_;
-
-    struct ibv_device* dev_;
+    int dev_port_;
 
     union ibv_gid gid_;
 
-    struct ibv_context* dev_ctx_;
+    struct ibv_device* dev_;
 
-    struct ibv_pd* dev_pd_;
+    struct ibv_context* dev_ctx_; // only one dev context
 
-    struct ibv_cq* dev_cq_;
+    struct ibv_pd* dev_pd_; // only one protect domain
 
-    struct ibv_qp* dev_qp_;
+    std::vector<HiRDMAQP*> vec_qp_;
+
+    std::vector<HiRDMABuffer*> vec_buf_;
 };
 
 };
