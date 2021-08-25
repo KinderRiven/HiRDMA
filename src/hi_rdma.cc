@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-25 19:35:38
+ * @LastEditTime: 2021-08-25 19:38:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -348,7 +348,6 @@ HiRDMABuffer* HiRDMA::RegisterRDMABuffer(size_t size, int access_mode)
 
 HiRDMAQP* HiRDMA::RegisterQP()
 {
-
     /* create cq */
     struct ibv_cq* _dev_cq = ibv_create_cq(dev_ctx_, 4096, nullptr, nullptr, 0);
     if (_dev_cq == nullptr) {
@@ -381,7 +380,7 @@ HiRDMAQP* HiRDMA::RegisterQP()
         return nullptr;
     }
 
-    HiRDMAQP* _qp = new HiRDMAQP(dev_port_, dev_idx_, dev_qp_->qp_num, lid_, dev_qp_, &gid_);
+    HiRDMAQP* _qp = new HiRDMAQP(dev_port_, dev_idx_, _dev_qp->qp_num, lid_, _dev_cq, _dev_qp, &gid_);
     vec_qp_.push_back(_qp);
     return _qp;
 }

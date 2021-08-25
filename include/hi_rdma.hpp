@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-25 19:34:17
+ * @LastEditTime: 2021-08-25 19:36:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -113,32 +113,17 @@ private:
 // only one qp support
 class HiRDMA {
 public: // initlizate
+    HiRDMA() = delete;
+
     static Status CreateRDMAContext(Options& options, HiRDMA** context);
+
+    static Status ConnectQP(HiRDMAQP* local_qp, HiRDMAQP* remote_qp);
 
     HiRDMABuffer* RegisterRDMABuffer(size_t size, int access_mode);
 
     HiRDMAQP* RegisterQP();
 
-    Status ConnectQP(HiRDMAQP* local_qp, HiRDMAQP* remote_qp);
-
-    Status PollQP(int num);
-
     void PrintInfo();
-
-public: // verb
-    HiRDMA() = delete;
-
-    Status Write(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size); // rdma write verb
-
-    Status Read(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, size_t size); // rdma read verb
-
-    Status Send(HiRDMABuffer* lbuf, uint64_t offset, char* buf, size_t size); // rdma send verb
-
-    Status Receive(HiRDMABuffer* lbuf, uint64_t offset, size_t size); // rdma receive verb
-
-    Status AtomicFetchAdd(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t add, uint64_t offset); // rdma atomic fetch and add
-
-    Status AtomicCompareSwap(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t compare, uint64_t swap, uint64_t offset); // rdma compare and swap
 
 private:
     // only support private initlizate
