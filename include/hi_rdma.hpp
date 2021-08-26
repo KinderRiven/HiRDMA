@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-26 13:16:35
+ * @LastEditTime: 2021-08-26 13:18:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -72,7 +72,7 @@ private:
 
 class HiRDMAQP {
 public:
-    HiRDMAQP() { }
+    HiRDMAQP();
 
     HiRDMAQP(int port_num, int idx, int qp_num, int lid, struct ibv_cq* cq, struct ibv_qp* qp, union ibv_gid* gid);
 
