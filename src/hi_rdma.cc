@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:44:55
- * @LastEditTime: 2021-08-26 13:14:15
+ * @LastEditTime: 2021-08-26 13:20:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/src/hi_rdma.cpp
@@ -351,7 +351,7 @@ HiRDMAQP* HiRDMA::RegisterQP()
     /* create cq */
     struct ibv_cq* _dev_cq = ibv_create_cq(dev_ctx_, 4096, nullptr, nullptr, 0);
     if (_dev_cq == nullptr) {
-        return Status::IOError("create cq failed.");
+        return nullptr;
     }
 
     /* create qp */
