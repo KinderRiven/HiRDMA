@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-11 15:16:46
- * @LastEditTime: 2021-08-25 19:36:59
+ * @LastEditTime: 2021-08-26 13:16:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /HiRDMA/include/rdma.hpp
@@ -23,46 +23,6 @@ enum access_mode_t {
     REMOTE_WR = IBV_ACCESS_REMOTE_WRITE,
     REMOTE_RD = IBV_ACCESS_REMOTE_READ,
     REMOTE_ATOMIC = IBV_ACCESS_REMOTE_ATOMIC,
-};
-
-struct HiRDMAQP {
-public:
-    HiRDMAQP() { }
-
-    HiRDMAQP(int port_num, int idx, int qp_num, int lid, struct ibv_cq* cq, struct ibv_qp* qp, union ibv_gid* gid);
-
-    void Print();
-
-    Status PollQP(int num);
-
-    Status Write(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size);
-
-    Status Read(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, size_t size);
-
-    Status Send(HiRDMABuffer* lbuf, uint64_t offset, char* buf, size_t size);
-
-    Status Receive(HiRDMABuffer* lbuf, uint64_t offset, size_t size);
-
-    Status AtomicFetchAdd(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t add, uint64_t offset);
-
-    Status AtomicCompareSwap(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t compare, uint64_t swap, uint64_t offset);
-
-    friend class HiRDMA;
-
-private:
-    int lid_;
-
-    int idx_;
-
-    int qp_num_;
-
-    int port_num_;
-
-    uint8_t gid_[16];
-
-    struct ibv_cq* cq_;
-
-    struct ibv_qp* qp_;
 };
 
 class HiRDMABuffer {
@@ -108,6 +68,46 @@ private:
     int lkey_;
 
     int rkey_;
+};
+
+class HiRDMAQP {
+public:
+    HiRDMAQP() { }
+
+    HiRDMAQP(int port_num, int idx, int qp_num, int lid, struct ibv_cq* cq, struct ibv_qp* qp, union ibv_gid* gid);
+
+    void Print();
+
+    Status PollQP(int num);
+
+    Status Write(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, char* buf, size_t size);
+
+    Status Read(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t offset, size_t size);
+
+    Status Send(HiRDMABuffer* lbuf, uint64_t offset, char* buf, size_t size);
+
+    Status Receive(HiRDMABuffer* lbuf, uint64_t offset, size_t size);
+
+    Status AtomicFetchAdd(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t add, uint64_t offset);
+
+    Status AtomicCompareSwap(HiRDMABuffer* lbuf, HiRDMABuffer* rbuf, uint64_t compare, uint64_t swap, uint64_t offset);
+
+    friend class HiRDMA;
+
+private:
+    int lid_;
+
+    int idx_;
+
+    int qp_num_;
+
+    int port_num_;
+
+    uint8_t gid_[16];
+
+    struct ibv_cq* cq_;
+
+    struct ibv_qp* qp_;
 };
 
 // only one qp support
